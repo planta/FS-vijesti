@@ -3,6 +3,8 @@ package com.theartball.theartball;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Locale;
 
 import android.content.Intent;
@@ -16,6 +18,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,6 +27,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements ActionBar.TabListener {
 
@@ -203,36 +209,6 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_grid, container, false);
-
-            DefaultHttpClient   httpclient = new DefaultHttpClient(new BasicHttpParams());
-            HttpPost httppost = new HttpPost("http://www.theartball.com/admin/iOS/jsonWebService");
-// Depends on your web service
-            httppost.setHeader("Content-type", "application/json");
-
-            InputStream inputStream = null;
-            String result = null;
-            try {
-                HttpResponse response = httpclient.execute(httppost);
-                HttpEntity entity = response.getEntity();
-
-                inputStream = entity.getContent();
-                // json is UTF-8 by default
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
-                StringBuilder sb = new StringBuilder();
-
-                String line = null;
-                while ((line = reader.readLine()) != null)
-                {
-                    sb.append(line + "\n");
-                }
-                result = sb.toString();
-            } catch (Exception e) {
-                // Oops
-            }
-            finally {
-                try{if(inputStream != null)inputStream.close();}catch(Exception squish){}
-            }
-
             return rootView;
         }
     }
