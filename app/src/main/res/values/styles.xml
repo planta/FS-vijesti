@@ -5,7 +5,8 @@
         <item name="android:actionBarStyle">@style/MyActionBar</item>
         <item name="actionBarStyle">@style/MyActionBar</item>
         <item name="android:actionBarTabStyle">@style/myActionTabBar</item>
-        <item name="android:actionBarTabBarStyle">@style/myActionTabBar</item>
+        <item name="actionBarTabBarStyle">@style/myActionTabBar</item>
+        <item name="colorAccent">@android:color/white</item>
     </style>
     <style name="MyActionBar"
         parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
@@ -14,7 +15,7 @@
     </style>
     <style name="myActionTabBar"
         parent="@style/Widget.AppCompat.Light.ActionBar.TabView">
-        <item name="android:background">@color/mainBlue</item>
-        <item name="background">@color/mainBlue</item>
+        <item name="android:background">@drawable/action_tab_indicator</item>
+        <item name="background">@drawable/action_tab_indicator</item>
     </style>
 </resources>
