@@ -206,8 +206,23 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
 
         @Override
         protected void onPostExecute(String result) {
-            Log.d("TAG",result);
+
+            result="{ \"Android\" :"+result+"}";
+//            Log.d("TAG", result);
             progressDialog.hide();
+            try {
+                JSONObject allNews=new JSONObject(result);
+                JSONArray allNewsArray=allNews.optJSONArray("Android");
+                Log.d("TAG",String.valueOf(allNewsArray.length()));
+                for(int i=0;i<allNewsArray.length();i++){
+                    JSONObject newsItem=allNewsArray.getJSONObject(i);
+                    Log.d("TAG",newsItem.optString("title"));
+                    Log.d("TAG",newsItem.optString("content"));
+                    Log.d("TAG",newsItem.optString("category"));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
         }
 
@@ -226,12 +241,6 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                     stringBuilder.append(line + "\n");
                 }
                 result = stringBuilder.toString();
-                JSONObject mainObject = new JSONObject(result);
-                for(int i=0;i<mainObject.length();i++){
-
-                    Log.d("TAG",mainObject.getJSONObject("title").toString());
-                }
-
             } catch (UnsupportedEncodingException e1) {
 //                Log.e("UnsupportedEncodingException", e1.toString());
                 e1.printStackTrace();
@@ -241,8 +250,6 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             } catch (IOException e4) {
                 Log.e("IOException", e4.toString());
                 e4.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
 
             Log.d("TAG", result);
