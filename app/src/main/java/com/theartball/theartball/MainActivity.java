@@ -1,15 +1,21 @@
 package com.theartball.theartball;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Locale;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -177,6 +183,52 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                     return getString(R.string.title_section4);
             }
             return null;
+        }
+    }
+
+    class MyAsyncTask extends AsyncTask<String, String, Void> {
+
+        private ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
+        InputStream inputStream = null;
+        String result = "";
+
+        protected void onPreExecute() {
+            progressDialog.setMessage("Downloading your data...");
+            progressDialog.show();
+            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                public void onCancel(DialogInterface arg0) {
+                    MyAsyncTask.this.cancel(true);
+                }
+            });
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                URL newsUrl = new URL("http://www.theartball.com/admin/iOS/getnews.php");
+                URLConnection urlConnection = newsUrl.openConnection();
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                String line = null;
+                StringBuilder stringBuilder = new StringBuilder();
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line + "\n");
+                }
+                result = stringBuilder.toString();
+            } catch (UnsupportedEncodingException e1) {
+                Log.e("UnsupportedEncodingException", e1.toString());
+                e1.printStackTrace();
+            } catch (IllegalStateException e3) {
+                Log.e("IllegalStateException", e3.toString());
+                e3.printStackTrace();
+            } catch (IOException e4) {
+                Log.e("IOException", e4.toString());
+                e4.printStackTrace();
+            }
+
+            Log.d("TAG", result);
+
+            return result;
         }
     }
 
