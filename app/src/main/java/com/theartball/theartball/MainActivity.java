@@ -2,6 +2,8 @@ package com.theartball.theartball;
 
 import java.util.Locale;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.argb(255,11,120,228)));
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -133,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 4;
         }
 
         @Override
@@ -141,11 +143,13 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             Locale l = Locale.getDefault();
             switch (position) {
                 case 0:
-                    return getString(R.string.title_section1).toUpperCase(l);
+                    return getString(R.string.title_section1);
                 case 1:
-                    return getString(R.string.title_section2).toUpperCase(l);
+                    return getString(R.string.title_section2);
                 case 2:
-                    return getString(R.string.title_section3).toUpperCase(l);
+                    return getString(R.string.title_section3);
+                case 3:
+                    return getString(R.string.title_section4);
             }
             return null;
         }
