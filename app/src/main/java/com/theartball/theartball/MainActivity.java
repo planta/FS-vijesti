@@ -8,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Locale;
 
 import android.app.ProgressDialog;
@@ -54,16 +55,18 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
+    ArrayList<NewsItem> newsArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        newsArray=new ArrayList<NewsItem>();
         Log.d("TAG","PORUKA");
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.argb(255,11,120,228)));
+//        actionBar.setBackgroundDrawable(new ColorDrawable(Color.argb(255,11,120,228)));
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -215,10 +218,19 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                 JSONArray allNewsArray=allNews.optJSONArray("Android");
                 Log.d("TAG",String.valueOf(allNewsArray.length()));
                 for(int i=0;i<allNewsArray.length();i++){
-                    JSONObject newsItem=allNewsArray.getJSONObject(i);
-                    Log.d("TAG",newsItem.optString("title"));
-                    Log.d("TAG",newsItem.optString("content"));
-                    Log.d("TAG",newsItem.optString("category"));
+                    JSONObject newsItemJSON=allNewsArray.getJSONObject(i);
+                    NewsItem newsItem=new NewsItem();
+                    newsItem.setTitle(newsItemJSON.optString("title").toString());
+                    newsItem.setContent(newsItemJSON.optString("content").toString());
+                    newsItem.setCategory(newsItemJSON.optString("category").toString());
+                    newsItem.setImageURL(newsItemJSON.optString("image").toString());
+                    newsItem.setDate(newsItemJSON.optString("date").toString());
+                    if(newsItemJSON.optString("important").toString().equals("1")){
+                        newsItem.setImportant(true);
+                    }
+                    else
+                        newsItem.setImportant(false);
+                    newsArray.add(newsItem);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
