@@ -9,4 +9,5 @@
     <string name="action_articles">Articles</string>
     <string name="action_archive">Archive</string>
     <string name="action_about">About</string>
+    <string name="action_refresh">Refresh</string>
 </resources>

@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
-        new MyAsyncTask().execute();
+       new MyAsyncTask().execute();
     }
 
 
@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        menu.findItem(R.id.action_refresh).setVisible(true);
         return true;
     }
 
@@ -130,6 +131,9 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             case R.id.action_about:
                 intent = new Intent(this, AboutActivity.class);
                 startActivity(intent);
+                return true;
+            case R.id.action_refresh:
+                new MyAsyncTask().execute();
                 return true;
         }
 
@@ -198,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         String result = "";
 
         protected void onPreExecute() {
-            progressDialog.setMessage("Downloading your data...");
+            progressDialog.setMessage("Loading...");
             progressDialog.show();
             progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 public void onCancel(DialogInterface arg0) {
@@ -211,12 +215,10 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         protected void onPostExecute(String result) {
 
             result="{ \"Android\" :"+result+"}";
-//            Log.d("TAG", result);
             progressDialog.hide();
             try {
                 JSONObject allNews=new JSONObject(result);
                 JSONArray allNewsArray=allNews.optJSONArray("Android");
-                Log.d("TAG",String.valueOf(allNewsArray.length()));
                 for(int i=0;i<allNewsArray.length();i++){
                     JSONObject newsItemJSON=allNewsArray.getJSONObject(i);
                     NewsItem newsItem=new NewsItem();
@@ -263,10 +265,6 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                 Log.e("IOException", e4.toString());
                 e4.printStackTrace();
             }
-
-            Log.d("TAG", result);
-
-
 
             return result;
         }
