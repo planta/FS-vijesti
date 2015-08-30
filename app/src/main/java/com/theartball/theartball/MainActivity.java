@@ -35,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements ActionBar.TabListener {
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Log.d("TAG","PORUKA");
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -93,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+        new MyAsyncTask().execute();
     }
 
 
@@ -186,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         }
     }
 
-    class MyAsyncTask extends AsyncTask<String, String, Void> {
+    class MyAsyncTask extends AsyncTask<String, String, String> {
 
         private ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
         InputStream inputStream = null;
@@ -203,6 +205,13 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         }
 
         @Override
+        protected void onPostExecute(String result) {
+            Log.d("TAG",result);
+            progressDialog.hide();
+
+        }
+
+        @Override
         protected String doInBackground(String... params) {
             try {
                 URL newsUrl = new URL("http://www.theartball.com/admin/iOS/getnews.php");
@@ -210,13 +219,21 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
                 String line = null;
+
                 StringBuilder stringBuilder = new StringBuilder();
+
                 while ((line = reader.readLine()) != null) {
                     stringBuilder.append(line + "\n");
                 }
                 result = stringBuilder.toString();
+                JSONObject mainObject = new JSONObject(result);
+                for(int i=0;i<mainObject.length();i++){
+
+                    Log.d("TAG",mainObject.getJSONObject("title").toString());
+                }
+
             } catch (UnsupportedEncodingException e1) {
-                Log.e("UnsupportedEncodingException", e1.toString());
+//                Log.e("UnsupportedEncodingException", e1.toString());
                 e1.printStackTrace();
             } catch (IllegalStateException e3) {
                 Log.e("IllegalStateException", e3.toString());
@@ -224,9 +241,13 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             } catch (IOException e4) {
                 Log.e("IOException", e4.toString());
                 e4.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
 
             Log.d("TAG", result);
+
+
 
             return result;
         }
