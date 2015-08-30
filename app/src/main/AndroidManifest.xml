@@ -16,6 +16,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/action_about"
+            android:parentActivityName=".MainActivity" >
+        </activity>
+        <activity
+            android:name=".ArchiveActivity"
+            android:label="@string/action_archive"
+            android:parentActivityName=".MainActivity" >
+        </activity>
+        <activity
+            android:name=".ArticlesActivity"
+            android:label="@string/action_articles"
+            android:parentActivityName=".MainActivity" >
+        </activity>
     </application>
 
 </manifest>

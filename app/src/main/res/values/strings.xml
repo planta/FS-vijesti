@@ -5,7 +5,8 @@
     <string name="title_section2">Comps</string>
     <string name="title_section3">Videos</string>
     <string name="title_section4">Other</string>
-    <string name="hello_world">Hello world!</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="action_articles">Articles</string>
+    <string name="action_archive">Archive</string>
+    <string name="action_about">About</string>
 </resources>
