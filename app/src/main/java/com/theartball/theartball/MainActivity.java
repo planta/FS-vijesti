@@ -48,6 +48,7 @@ import org.json.JSONObject;
 public class MainActivity extends AppCompatActivity implements ActionBar.TabListener {
 
     final ArrayList<NewsItem> newsArray = new ArrayList<NewsItem>();
+    String databaseURL="http://www.theartball.com/admin/iOS/getnews.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,13 +65,19 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
 
         ActionBar.Tab allTab = actionBar.newTab().setText(getString(R.string.title_section1));
         allTab.setTabListener(this);
-        ActionBar.Tab videosTab = actionBar.newTab().setText(getString(R.string.title_section2));
+        ActionBar.Tab compsTab = actionBar.newTab().setText(getString(R.string.title_section2));
+        compsTab.setTabListener(this);
+        ActionBar.Tab videosTab = actionBar.newTab().setText(getString(R.string.title_section3));
         videosTab.setTabListener(this);
+        ActionBar.Tab otherTab = actionBar.newTab().setText(getString(R.string.title_section4));
+        otherTab.setTabListener(this);
 
         actionBar.addTab(allTab);
+        actionBar.addTab(compsTab);
         actionBar.addTab(videosTab);
+        actionBar.addTab(otherTab);
 
-        new NewsAsyncTask().execute();
+//        new NewsAsyncTask().execute();
     }
 
 
@@ -115,7 +122,21 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-
+        switch (tab.getText().toString()){
+            case "Comps":
+                databaseURL="http://www.theartball.com/admin/iOS/getnews.php?category=competitions";
+                break;
+            case "Videos":
+                databaseURL="http://www.theartball.com/admin/iOS/getnews.php?category=videos";
+                break;
+            case "All":
+                databaseURL="http://www.theartball.com/admin/iOS/getnews.php";
+                break;
+            case "Other":
+                databaseURL="http://www.theartball.com/admin/iOS/getnews.php?category=other";
+                break;
+        }
+        new NewsAsyncTask().execute();
     }
 
     @Override
@@ -150,6 +171,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             try {
                 JSONObject allNews=new JSONObject(result);
                 JSONArray allNewsArray=allNews.optJSONArray("Android");
+                newsArray.clear();
                 for(int i=0;i<allNewsArray.length();i++){
                     JSONObject newsItemJSON=allNewsArray.getJSONObject(i);
                     NewsItem newsItem=new NewsItem();
@@ -165,7 +187,8 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                         newsItem.setImportant(false);
                     }
 
-                    newsArray.add(newsItem);
+                    newsArray.add(i,newsItem);
+
                 }
 
                 GridView gridView = (GridView)findViewById(R.id.newsGrid);
@@ -179,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         @Override
         protected String doInBackground(String... params) {
             try {
-                URL newsUrl = new URL("http://www.theartball.com/admin/iOS/getnews.php");
+                URL newsUrl = new URL(databaseURL);
                 URLConnection urlConnection = newsUrl.openConnection();
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));

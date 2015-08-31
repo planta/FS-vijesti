@@ -1,6 +1,7 @@
 package com.theartball.theartball;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,8 +32,7 @@ public class NewsAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        //return listaVijesti.size();
-        return 3;
+        return listaVijesti.size();
     }
 
     @Override
@@ -55,8 +55,7 @@ public class NewsAdapter extends BaseAdapter {
             gridView = new View(context);
             gridView = layoutInflater.inflate(R.layout.small_news_cell, null);
             TextView title = (TextView)gridView.findViewById(R.id.newsTitle);
-            title.setText("Test");
-            Log.d("TAGER", listaVijesti.get(0).title.toString());
+            title.setText(listaVijesti.get(position).title.toString());
         } else {
             gridView = (View)convertView;
         }
