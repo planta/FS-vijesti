@@ -3,11 +3,15 @@ package com.theartball.theartball;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -27,7 +31,8 @@ public class NewsAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return listaVijesti.size();
+        //return listaVijesti.size();
+        return 3;
     }
 
     @Override
@@ -42,18 +47,21 @@ public class NewsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView;
-        if (convertView == null) {
-            imageView = new ImageView(context);
-            imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 8);
+        View gridView;
+
+        LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        if(convertView == null) {
+            gridView = new View(context);
+            gridView = layoutInflater.inflate(R.layout.small_news_cell, null);
+            TextView title = (TextView)gridView.findViewById(R.id.newsTitle);
+            title.setText("Test");
+            Log.d("TAGER", listaVijesti.get(0).title.toString());
         } else {
-            imageView = (ImageView) convertView;
+            gridView = (View)convertView;
         }
 
-        imageView.setImageDrawable(getImageFromWeb("http://www.fot-o-grafiti.hr/slike/nauchi/estetiku_fotografije/_kompozicija/centar-slike.jpg"));
-        return imageView;
+        return gridView;
     }
 
     public static Drawable getImageFromWeb(String url) {
