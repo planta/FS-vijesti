@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
-    ArrayList<NewsItem> newsArray;
+    static ArrayList<NewsItem> newsArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

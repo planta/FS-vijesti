@@ -27,17 +27,17 @@ public class NewsAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 13;
+        return listaVijesti.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return listaVijesti.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override
