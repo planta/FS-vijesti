@@ -37,6 +37,9 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,6 +66,11 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        AdView mAdView = (AdView)findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
         newsArray=new ArrayList<NewsItem>();
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
