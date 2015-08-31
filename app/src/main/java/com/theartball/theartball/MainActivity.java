@@ -34,6 +34,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
-        newsArray=new ArrayList<NewsItem>();
+        newsArray = new ArrayList<NewsItem>();
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -106,7 +107,8 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
-       new MyAsyncTask().execute();
+
+        new NewsAsyncTask().execute();
     }
 
 
@@ -142,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                 startActivity(intent);
                 return true;
             case R.id.action_refresh:
-                new MyAsyncTask().execute();
+                new NewsAsyncTask().execute();
                 return true;
         }
 
@@ -204,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         }
     }
 
-    class MyAsyncTask extends AsyncTask<String, String, String> {
+    class NewsAsyncTask extends AsyncTask<String, String, String> {
 
         private ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
         InputStream inputStream = null;
@@ -215,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             progressDialog.show();
             progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 public void onCancel(DialogInterface arg0) {
-                    MyAsyncTask.this.cancel(true);
+                    NewsAsyncTask.this.cancel(true);
                 }
             });
         }
@@ -231,16 +233,18 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                 for(int i=0;i<allNewsArray.length();i++){
                     JSONObject newsItemJSON=allNewsArray.getJSONObject(i);
                     NewsItem newsItem=new NewsItem();
-                    newsItem.setTitle(newsItemJSON.optString("title").toString());
-                    newsItem.setContent(newsItemJSON.optString("content").toString());
-                    newsItem.setCategory(newsItemJSON.optString("category").toString());
-                    newsItem.setImageURL(newsItemJSON.optString("image").toString());
-                    newsItem.setDate(newsItemJSON.optString("date").toString());
-                    if(newsItemJSON.optString("important").toString().equals("1")){
+                    newsItem.setTitle(newsItemJSON.optString("title"));
+                    newsItem.setContent(newsItemJSON.optString("content"));
+                    newsItem.setCategory(newsItemJSON.optString("category"));
+                    newsItem.setImageURL(newsItemJSON.optString("image"));
+                    newsItem.setDate(newsItemJSON.optString("date"));
+
+                    if(newsItemJSON.optString("important").equals("1")){
                         newsItem.setImportant(true);
-                    }
-                    else
+                    } else {
                         newsItem.setImportant(false);
+                    }
+
                     newsArray.add(newsItem);
                 }
             } catch (JSONException e) {
@@ -308,6 +312,8 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_grid, container, false);
+            GridView gridView = (GridView)rootView.findViewById(R.id.newsGrid);
+            gridView.setAdapter(new NewsAdapter(rootView.getContext(), newsArray));
             return rootView;
         }
     }
