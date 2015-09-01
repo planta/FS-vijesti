@@ -2,6 +2,8 @@ package com.theartball.theartball;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -27,10 +29,12 @@ public class ReadArticleActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_article);
 
+        final android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.argb(255, 11, 120, 228)));
+
         Bundle articleData=getIntent().getExtras();
         title=articleData.getString("newsTitle");
         content=articleData.getString("newsContent");
-        Log.d("TAG",title);
 
         TextView titleTextView=(TextView)findViewById(R.id.titleTextView);
         titleTextView.setText(title);

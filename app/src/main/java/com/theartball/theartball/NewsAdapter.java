@@ -37,7 +37,6 @@ public class NewsAdapter extends BaseAdapter {
     public NewsAdapter(Context c, ArrayList<NewsItem> newsList) {
         context = c;
         listaVijesti = newsList;
-
     }
 
     @Override
@@ -54,7 +53,7 @@ public class NewsAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
-    int j=1;
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -74,7 +73,6 @@ public class NewsAdapter extends BaseAdapter {
         ImageView newsImage=(ImageView)gridCellView.findViewById(R.id.newsImage);
         Picasso.with(context).load(newsItem.imageURL).placeholder(R.drawable.placeholder).resize(300,300).centerCrop().into(newsImage);
 
-
         ImageView playIcon=(ImageView)gridCellView.findViewById(R.id.playicon);
         playIcon.setImageResource(R.drawable.player);
         if(newsItem.category.equals("Videos")){
@@ -83,16 +81,8 @@ public class NewsAdapter extends BaseAdapter {
         return gridCellView;
     }
 
-//    public static Drawable getImageFromWeb(String url) {
-//        try {
-//            InputStream inputStream = (InputStream) new URL(url).getContent();
-//            Drawable drawable = Drawable.createFromStream(inputStream, "src name");
-//            return drawable;
-//        } catch (Exception e) {
-//            return null;
-//        }
-//    }
-//
+
+
 //    private class ImageDownloadTask extends AsyncTask<String, String, Bitmap>{
 //
 //
