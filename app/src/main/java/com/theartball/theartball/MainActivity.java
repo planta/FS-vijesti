@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.argb(255, 11, 120, 228)));
 
         ActionBar.Tab allTab = actionBar.newTab().setText(getString(R.string.title_section1));
         allTab.setTabListener(this);
