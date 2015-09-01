@@ -37,7 +37,7 @@ import java.util.regex.Matcher;
 /**
  * Created by Uki on 9/1/15.
  */
-public class ReadArticleActivity extends ActionBarActivity implements Html.ImageGetter {
+public class ReadArticleActivity extends ActionBarActivity implements Html.ImageGetter{
 
 
     String title;
@@ -76,8 +76,8 @@ public class ReadArticleActivity extends ActionBarActivity implements Html.Image
         String[] links = extractLinks(content);
         content = addTagsToLinks(content, links);
         Spanned spanned = Html.fromHtml(content, this, null);
-//        contentTextView.setText(spanned);
-        contentTextView.setText(Html.fromHtml(content));
+        contentTextView.setText(spanned);
+//        contentTextView.setText(Html.fromHtml(content));
 //        contentTextView.loadData(content, "text/html", null);
     }
 
@@ -142,52 +142,8 @@ public class ReadArticleActivity extends ActionBarActivity implements Html.Image
 
     @Override
     public Drawable getDrawable(String source) {
-        LevelListDrawable d = new LevelListDrawable();
-        Drawable empty = getResources().getDrawable(R.drawable.placeholder);
-        d.addLevel(0, 0, empty);
-        d.setBounds(0, 0, 100, empty.getIntrinsicHeight());
-
-//        new LoadImage().execute(source, d);
-
-        return d;
+        return null;
     }
-
-//    class LoadImage extends AsyncTask<Object, Void, Bitmap> {
-//
-//        private LevelListDrawable mDrawable;
-//
-//        @Override
-//        protected Bitmap doInBackground(Object... params) {
-//            String source = (String) params[0];
-//            mDrawable = (LevelListDrawable) params[1];
-//            try {
-//                InputStream is = new URL(source).openStream();
-//                return BitmapFactory.decodeStream(is);
-//            } catch (FileNotFoundException e) {
-//                e.printStackTrace();
-//            } catch (MalformedURLException e) {
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Bitmap bitmap) {
-//            if (bitmap != null) {
-//                BitmapDrawable d = new BitmapDrawable(bitmap);
-//                mDrawable.addLevel(1, 1, d);
-//                mDrawable.setBounds(0, 0, scrollView.getWidth(), (int) (bitmap.getHeight() * (double) ((double) scrollView.getWidth() / (double) bitmap.getWidth())));
-//                mDrawable.setLevel(1);
-//                Log.d("TAG", String.valueOf((float) ((float) bitmap.getWidth() / (float) scrollView.getWidth())));
-//                Log.d("TAG", String.valueOf(bitmap.getWidth()));
-//                Log.d("TAG",String.valueOf(scrollView.getWidth()));
-//                CharSequence t = contentTextView.getText();
-//                contentTextView.setText(t);
-//            }
-//        }
-//    }
 }
 
 
