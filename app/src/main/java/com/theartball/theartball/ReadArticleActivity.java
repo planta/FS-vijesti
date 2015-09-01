@@ -1,26 +1,43 @@
 package com.theartball.theartball;
 
+import android.app.ActionBar;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 /**
- * Created by Mario on 30.8.2015..
+ * Created by Uki on 9/1/15.
  */
-public class ArticlesActivity extends ActionBarActivity {
+public class ReadArticleActivity extends ActionBarActivity {
+
+
+    String title;
+    String date;
+    String content;
+    String category;
+
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_articles);
+        setContentView(R.layout.activity_read_article);
+
+        Bundle articleData=getIntent().getExtras();
+        title=articleData.getString("newsTitle");
+        content=articleData.getString("newsContent");
+        Log.d("TAG",title);
+
+        TextView titleTextView=(TextView)findViewById(R.id.titleTextView);
+        titleTextView.setText(title);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }

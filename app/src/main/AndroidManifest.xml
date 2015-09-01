@@ -26,7 +26,8 @@
             android:name=".AboutActivity"
             android:label="@string/action_about"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            >
         </activity>
         <activity
             android:name=".ArchiveActivity"
@@ -37,6 +38,12 @@
         <activity
             android:name=".ArticlesActivity"
             android:label="@string/action_articles"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".ReadArticleActivity"
+            android:label="@string/read_article"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
         </activity>

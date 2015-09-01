@@ -34,6 +34,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -77,6 +78,17 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         actionBar.addTab(videosTab);
         actionBar.addTab(otherTab);
 
+        GridView gridView=(GridView)findViewById(R.id.newsGrid);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), ReadArticleActivity.class);
+                NewsItem newsItem=newsArray.get(position);
+                intent.putExtra("newsTitle",newsItem.title);
+                intent.putExtra("newsContent",newsItem.content);
+                startActivity(intent);
+            }
+        });
 //        new NewsAsyncTask().execute();
     }
 
