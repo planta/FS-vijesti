@@ -2,4 +2,5 @@
 <resources>
 
     <item name="mainBlue" type="color">#0B81E4</item>
+    <item name="backgroundGrey" type="color">#D4D4D4</item>
 </resources>
