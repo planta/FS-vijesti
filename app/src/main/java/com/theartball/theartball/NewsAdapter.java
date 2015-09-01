@@ -1,8 +1,12 @@
 package com.theartball.theartball;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +18,9 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -47,20 +53,28 @@ public class NewsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View gridView;
+        View gridCellView;
 
         LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         if(convertView == null) {
-            gridView = new View(context);
-            gridView = layoutInflater.inflate(R.layout.small_news_cell, null);
-            TextView title = (TextView)gridView.findViewById(R.id.newsTitle);
-            title.setText(listaVijesti.get(position).title.toString());
+            gridCellView = new View(context);
         } else {
-            gridView = (View)convertView;
+            gridCellView = (View)convertView;
         }
-
-        return gridView;
+        NewsItem newsItem=listaVijesti.get(position);
+        gridCellView = layoutInflater.inflate(R.layout.small_news_cell, null);
+        TextView title = (TextView)gridCellView.findViewById(R.id.newsTitle);
+        title.setText(newsItem.title);
+        ImageView newsImage=(ImageView)gridCellView.findViewById(R.id.newsImage);
+        newsImage.setImageResource(R.drawable.placeholder);
+        ImageView playIcon=(ImageView)gridCellView.findViewById(R.id.playicon);
+        playIcon.setImageResource(R.drawable.player);
+        if(newsItem.category.equals("Videos")){
+            playIcon.setVisibility(View.VISIBLE);
+        }
+        new ImageDownloadTask(newsImage).execute(newsItem.imageURL);
+        return gridCellView;
     }
 
     public static Drawable getImageFromWeb(String url) {
@@ -70,6 +84,37 @@ public class NewsAdapter extends BaseAdapter {
             return drawable;
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    private class ImageDownloadTask extends AsyncTask<String, String, Bitmap>{
+
+
+        ImageView tempImageView;
+
+        public ImageDownloadTask(ImageView imageView){
+            tempImageView=imageView;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            Bitmap imgBitmap=null;
+            try {
+                URL imageLink=new URL(params[0]);
+                InputStream in = imageLink.openStream();
+                imgBitmap=BitmapFactory.decodeStream(in);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return imgBitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            tempImageView.setImageBitmap(bitmap);
         }
     }
 }

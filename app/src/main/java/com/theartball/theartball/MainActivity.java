@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                         newsItem.setImportant(false);
                     }
 
-                    newsArray.add(i,newsItem);
+                    newsArray.add(newsItem);
 
                 }
 
