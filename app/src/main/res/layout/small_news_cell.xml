@@ -20,7 +20,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:textAppearanceMedium"
+        android:textSize="@dimen/cell_title_size"
         android:text="Sample Text  - Medium"
         android:id="@+id/newsTitle"
         android:paddingBottom="8dp"

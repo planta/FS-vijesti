@@ -88,6 +88,8 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                 NewsItem newsItem=newsArray.get(position);
                 intent.putExtra("newsTitle",newsItem.title);
                 intent.putExtra("newsContent",newsItem.content);
+                intent.putExtra("newsDate",newsItem.date);
+                intent.putExtra("newsCategory",newsItem.category);
                 startActivity(intent);
             }
         });

@@ -3,4 +3,7 @@
 
     <item name="mainBlue" type="color">#0B81E4</item>
     <item name="backgroundGrey" type="color">#D4D4D4</item>
+    <item name="darkerGrey" type="color">#777777</item>
+    <item name="lighterGrey" type="color">#e5e5e5</item>
+    <item name="contentGrey" type="color">#444</item>
 </resources>
