@@ -1,5 +1,7 @@
 package com.theartball.theartball;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by Uki on 8/30/15.
  */

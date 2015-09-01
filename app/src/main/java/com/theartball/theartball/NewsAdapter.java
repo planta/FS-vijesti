@@ -16,6 +16,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.w3c.dom.Text;
 
 import java.io.IOException;
@@ -31,9 +33,11 @@ public class NewsAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<NewsItem> listaVijesti;
 
+
     public NewsAdapter(Context c, ArrayList<NewsItem> newsList) {
         context = c;
         listaVijesti = newsList;
+
     }
 
     @Override
@@ -50,6 +54,7 @@ public class NewsAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
+    int j=1;
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -67,54 +72,55 @@ public class NewsAdapter extends BaseAdapter {
         TextView title = (TextView)gridCellView.findViewById(R.id.newsTitle);
         title.setText(newsItem.title);
         ImageView newsImage=(ImageView)gridCellView.findViewById(R.id.newsImage);
-        newsImage.setImageResource(R.drawable.placeholder);
+        Picasso.with(context).load(newsItem.imageURL).placeholder(R.drawable.placeholder).resize(300,300).centerCrop().into(newsImage);
+
+
         ImageView playIcon=(ImageView)gridCellView.findViewById(R.id.playicon);
         playIcon.setImageResource(R.drawable.player);
         if(newsItem.category.equals("Videos")){
             playIcon.setVisibility(View.VISIBLE);
         }
-        new ImageDownloadTask(newsImage).execute(newsItem.imageURL);
         return gridCellView;
     }
 
-    public static Drawable getImageFromWeb(String url) {
-        try {
-            InputStream inputStream = (InputStream) new URL(url).getContent();
-            Drawable drawable = Drawable.createFromStream(inputStream, "src name");
-            return drawable;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    private class ImageDownloadTask extends AsyncTask<String, String, Bitmap>{
-
-
-        ImageView tempImageView;
-
-        public ImageDownloadTask(ImageView imageView){
-            tempImageView=imageView;
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... params) {
-            Bitmap imgBitmap=null;
-            try {
-                URL imageLink=new URL(params[0]);
-                InputStream in = imageLink.openStream();
-                imgBitmap=BitmapFactory.decodeStream(in);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return imgBitmap;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            super.onPostExecute(bitmap);
-            tempImageView.setImageBitmap(bitmap);
-        }
-    }
+//    public static Drawable getImageFromWeb(String url) {
+//        try {
+//            InputStream inputStream = (InputStream) new URL(url).getContent();
+//            Drawable drawable = Drawable.createFromStream(inputStream, "src name");
+//            return drawable;
+//        } catch (Exception e) {
+//            return null;
+//        }
+//    }
+//
+//    private class ImageDownloadTask extends AsyncTask<String, String, Bitmap>{
+//
+//
+//        ImageView tempImageView;
+//
+//        public ImageDownloadTask( ImageView imageView){
+//            tempImageView=imageView;
+//        }
+//
+//        @Override
+//        protected Bitmap doInBackground(String... params) {
+//            Bitmap imgBitmap=null;
+//            try {
+//                URL imageLink=new URL(params[0]);
+//                InputStream in = imageLink.openStream();
+//                imgBitmap=BitmapFactory.decodeStream(in);
+//            } catch (MalformedURLException e) {
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            return imgBitmap;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Bitmap bitmap) {
+//            super.onPostExecute(bitmap);
+//            tempImageView.setImageBitmap(bitmap);
+//        }
+//    }
 }
