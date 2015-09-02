@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LevelListDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.text.Spanned;
@@ -19,7 +20,10 @@ import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -69,16 +73,24 @@ public class ReadArticleActivity extends ActionBarActivity implements Html.Image
         dateTextView.setText("Date added: " + date);
         TextView categoryTextView = (TextView) findViewById(R.id.category);
         categoryTextView.setText("Category: " + category);
-        contentTextView=(TextView)findViewById(R.id.content);
-//        WebView contentTextView = (WebView) findViewById(R.id.content);
+//        contentTextView=(TextView)findViewById(R.id.content);
+        WebView contentTextView = (WebView) findViewById(R.id.content);
 
 
         String[] links = extractLinks(content);
         content = addTagsToLinks(content, links);
         Spanned spanned = Html.fromHtml(content, this, null);
-        contentTextView.setText(spanned);
+//        contentTextView.setText(spanned);
 //        contentTextView.setText(Html.fromHtml(content));
-//        contentTextView.loadData(content, "text/html", null);
+//        contentTextView.setWebViewClient(new WebChromeClient());
+        contentTextView.getSettings().setJavaScriptEnabled(true);
+        contentTextView.loadData(content, "text/html", null);
+//        contentTextView.setBackgroundColor(0x00000000);
+        contentTextView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.lighterGrey));
+//
+//        contentTextView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
+        Log.d("TAG", content);
+
     }
 
     @Override
@@ -127,10 +139,13 @@ public class ReadArticleActivity extends ActionBarActivity implements Html.Image
     }
 
     public String addTagsToLinks(String text, String[] links) {
-
         for (String link : links) {
             if (link.contains(".jpg") || link.contains(".png")) {
-                text = text.replace(link, String.format("<br><img src='%s' width='%d' height='300px' /><br>", link, 20));
+                text = text.replace(link, String.format("<br><img src='%s' width='100%%'  /><br>", link));
+            }  else if(link.contains(".youtube.com") || link.contains("youtu.be")){
+                if(link.length()>43) link=link.substring(0,43);
+                String videoID=link.substring(link.length()-11);
+                text = text.replace(link, String.format("<br><iframe src='https://www.youtube.com/embed/%s' width='100%%' height='%d' frameborder='0'></iframe><br>",videoID,(int)getResources().getDimension(R.dimen.embed_video)));
             } else {
                 text = text.replace(link, String.format("<br><a href='%s'> %s </a><br>", link, link));
             }

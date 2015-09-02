@@ -44,6 +44,7 @@
         <activity
             android:name=".ReadArticleActivity"
             android:label="@string/read_article"
+            android:hardwareAccelerated="true"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
         </activity>
