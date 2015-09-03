@@ -4,5 +4,5 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="cell_title_size">13sp</dimen>
     <dimen name="title_font_size">25sp</dimen>
-    <dimen name="embed_video">100sp</dimen>
+    <dimen name="embed_video">100dp</dimen>
 </resources>

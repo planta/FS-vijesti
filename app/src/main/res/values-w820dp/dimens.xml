@@ -5,5 +5,5 @@
     <dimen name="activity_horizontal_margin">64dp</dimen>
     <dimen name="title_font_size">34sp</dimen>
     <dimen name="cell_title_size">24sp</dimen>
-    <dimen name="embed_video">300sp</dimen>
+    <dimen name="embed_video">300dp</dimen>
 </resources>

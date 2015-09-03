@@ -2,5 +2,5 @@
 <resources>
     <dimen name="title_font_size">30sp</dimen>
     <dimen name="cell_title_size">22sp</dimen>
-    <dimen name="embed_video">300sp</dimen>
+    <dimen name="embed_video">300dp</dimen>
 </resources>

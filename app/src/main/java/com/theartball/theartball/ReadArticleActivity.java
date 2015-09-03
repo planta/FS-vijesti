@@ -84,7 +84,12 @@ public class ReadArticleActivity extends ActionBarActivity implements Html.Image
 //        contentTextView.setText(Html.fromHtml(content));
 //        contentTextView.setWebViewClient(new WebChromeClient());
         contentTextView.getSettings().setJavaScriptEnabled(true);
-        contentTextView.loadData(content, "text/html", null);
+        contentTextView.setWebChromeClient(new WebChromeClient() {
+        });
+        contentTextView.setWebViewClient(new WebViewClient(){ });
+
+//        contentTextView.loadData(content, "text/html", null);
+        contentTextView.loadDataWithBaseURL("",content,"text/html","UTF-8","");
 //        contentTextView.setBackgroundColor(0x00000000);
         contentTextView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.lighterGrey));
 //
