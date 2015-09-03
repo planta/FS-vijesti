@@ -170,6 +170,7 @@ public class ReadArticleActivity extends ActionBarActivity {
     }
 
     public String addTagsToLinks(String text, String[] links) {
+        text="<span style='font-size:10pt; color:#444444'>"+text+"</span>";
         for (String link : links) {
             if (link.contains(".jpg") || link.contains(".png")) {
                 text = text.replace(link, String.format("<br><img src='%s' width='100%%'  /><br>", link));
