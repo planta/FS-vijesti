@@ -84,12 +84,23 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), ReadArticleActivity.class);
                 NewsItem newsItem=newsArray.get(position);
-                intent.putExtra("newsTitle",newsItem.title);
-                intent.putExtra("newsContent",newsItem.content);
-                intent.putExtra("newsDate",newsItem.date);
-                intent.putExtra("newsCategory",newsItem.category);
+                Intent intent;
+                if(newsItem.category.equals("Videos")){
+                    intent = new Intent(MainActivity.this,PlayVideoActivity.class);
+                    if(newsItem.content.length()>43) newsItem.content=newsItem.content.substring(0,43);
+                    String videoID=newsItem.content.substring(newsItem.content.length()-11);
+                    intent.putExtra("Video-ID",videoID);
+                    intent.putExtra("autoplay",false);
+                }
+                else {
+                    intent = new Intent(MainActivity.this, ReadArticleActivity.class);
+
+                    intent.putExtra("newsTitle", newsItem.title);
+                    intent.putExtra("newsContent", newsItem.content);
+                    intent.putExtra("newsDate", newsItem.date);
+                    intent.putExtra("newsCategory", newsItem.category);
+                }
                 startActivity(intent);
             }
         });

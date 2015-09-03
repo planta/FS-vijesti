@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LevelListDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.RequiresPermission;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
@@ -27,6 +28,12 @@ import android.webkit.WebViewClient;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubeIntents;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerView;
+import com.google.android.youtube.player.YouTubeStandalonePlayer;
+
 import org.w3c.dom.Text;
 
 import java.io.FileNotFoundException;
@@ -41,7 +48,7 @@ import java.util.regex.Matcher;
 /**
  * Created by Uki on 9/1/15.
  */
-public class ReadArticleActivity extends ActionBarActivity implements Html.ImageGetter{
+public class ReadArticleActivity extends ActionBarActivity {
 
 
     String title;
@@ -51,6 +58,7 @@ public class ReadArticleActivity extends ActionBarActivity implements Html.Image
     int imgWidth;
     ScrollView scrollView;
     TextView contentTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +74,6 @@ public class ReadArticleActivity extends ActionBarActivity implements Html.Image
         date = articleData.getString("newsDate");
         category = articleData.getString("newsCategory");
 
-
         TextView titleTextView = (TextView) findViewById(R.id.titleTextView);
         titleTextView.setText(title);
         TextView dateTextView = (TextView) findViewById(R.id.date);
@@ -79,19 +86,32 @@ public class ReadArticleActivity extends ActionBarActivity implements Html.Image
 
         String[] links = extractLinks(content);
         content = addTagsToLinks(content, links);
-        Spanned spanned = Html.fromHtml(content, this, null);
+//        Spanned spanned = Html.fromHtml(content, this, null);
 //        contentTextView.setText(spanned);
 //        contentTextView.setText(Html.fromHtml(content));
 //        contentTextView.setWebViewClient(new WebChromeClient());
         contentTextView.getSettings().setJavaScriptEnabled(true);
         contentTextView.setWebChromeClient(new WebChromeClient() {
+
         });
-        contentTextView.setWebViewClient(new WebViewClient(){ });
+        contentTextView.setWebViewClient(new WebViewClient(){
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if(url.contains("youtube") || url.contains("youtu.be")){
+                    Log.d("TAG", "ya");
+                    Intent intent = new Intent(ReadArticleActivity.this,PlayVideoActivity.class);
+                    intent.putExtra("Video-ID",url.substring(url.length()-11));
+                    intent.putExtra("autoplay",true);
+                    startActivity(intent);
+                };
+            return true;
+            }
+        });
 
 //        contentTextView.loadData(content, "text/html", null);
         contentTextView.loadDataWithBaseURL("",content,"text/html","UTF-8","");
 //        contentTextView.setBackgroundColor(0x00000000);
-        contentTextView.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.lighterGrey));
+        contentTextView.setBackgroundColor(ContextCompat.getColor(ReadArticleActivity.this, R.color.lighterGrey));
 //
 //        contentTextView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
         Log.d("TAG", content);
@@ -103,6 +123,7 @@ public class ReadArticleActivity extends ActionBarActivity implements Html.Image
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -150,7 +171,8 @@ public class ReadArticleActivity extends ActionBarActivity implements Html.Image
             }  else if(link.contains(".youtube.com") || link.contains("youtu.be")){
                 if(link.length()>43) link=link.substring(0,43);
                 String videoID=link.substring(link.length()-11);
-                text = text.replace(link, String.format("<br><iframe src='https://www.youtube.com/embed/%s' width='100%%' height='%d' frameborder='0'></iframe><br>",videoID,(int)getResources().getDimension(R.dimen.embed_video)));
+//                text = text.replace(link, String.format("<br><iframe src='https://www.youtube.com/embed/%s' width='100%%' height='%d' frameborder='0'></iframe><br>",videoID,(int)getResources().getDimension(R.dimen.embed_video),link));
+                  text = text.replace(link, String.format("<br><div style='position:relative; top:0; left:0;'><a href='%s'><img src='http://img.youtube.com/vi/%s/0.jpg' style='position: relative; top: 0; left: 0;' width='100%%'/><img src='http://www.theartball.com/images/ytplayericon.png' style='position: absolute; left: 50%%; top: 50%%; margin: -40 0 0 -40;'/></a></div><br>",link,videoID));
             } else {
                 text = text.replace(link, String.format("<br><a href='%s'> %s </a><br>", link, link));
             }
@@ -160,10 +182,7 @@ public class ReadArticleActivity extends ActionBarActivity implements Html.Image
 
     }
 
-    @Override
-    public Drawable getDrawable(String source) {
-        return null;
-    }
+
 }
 
 
