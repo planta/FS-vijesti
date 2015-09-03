@@ -9,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LevelListDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.RequiresPermission;
@@ -97,13 +98,18 @@ public class ReadArticleActivity extends ActionBarActivity {
         contentTextView.setWebViewClient(new WebViewClient(){
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if(url.contains("youtube") || url.contains("youtu.be")){
-                    Log.d("TAG", "ya");
-                    Intent intent = new Intent(ReadArticleActivity.this,PlayVideoActivity.class);
-                    intent.putExtra("Video-ID",url.substring(url.length()-11));
-                    intent.putExtra("autoplay",true);
+                if(url.contains("youtube") || url.contains("youtu.be")) {
+                    Intent intent = new Intent(ReadArticleActivity.this, PlayVideoActivity.class);
+                    intent.putExtra("Video-ID", url.substring(url.length() - 11));
+                    intent.putExtra("autoplay", true);
                     startActivity(intent);
-                };
+                    ReadArticleActivity.this.overridePendingTransition(R.anim.slide_up,R.anim.no_change);
+                }
+                else{
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(browserIntent);
+                }
+
             return true;
             }
         });
@@ -114,7 +120,6 @@ public class ReadArticleActivity extends ActionBarActivity {
         contentTextView.setBackgroundColor(ContextCompat.getColor(ReadArticleActivity.this, R.color.lighterGrey));
 //
 //        contentTextView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
-        Log.d("TAG", content);
 
     }
 

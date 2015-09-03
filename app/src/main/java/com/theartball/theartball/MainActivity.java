@@ -92,6 +92,8 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                     String videoID=newsItem.content.substring(newsItem.content.length()-11);
                     intent.putExtra("Video-ID",videoID);
                     intent.putExtra("autoplay",false);
+                    startActivity(intent);
+                    MainActivity.this.overridePendingTransition(R.anim.slide_up, R.anim.no_change);
                 }
                 else {
                     intent = new Intent(MainActivity.this, ReadArticleActivity.class);
@@ -100,8 +102,9 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                     intent.putExtra("newsContent", newsItem.content);
                     intent.putExtra("newsDate", newsItem.date);
                     intent.putExtra("newsCategory", newsItem.category);
+                    startActivity(intent);
                 }
-                startActivity(intent);
+
             }
         });
 //        new NewsAsyncTask().execute();
