@@ -16,6 +16,7 @@
         android:padding="8dp"
         android:stretchMode="columnWidth"
         android:id="@+id/newsGrid"
+        android:fadingEdge="none"
         />
 
     <com.google.android.gms.ads.AdView
