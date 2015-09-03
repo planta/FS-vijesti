@@ -12,7 +12,7 @@
         android:id="@+id/aboutText"
         android:padding="12dp"
         android:background="@drawable/read_article_bg"
-        android:scrollIndicators="none"
+        android:scrollbars="none"
         />
 
 </LinearLayout>
