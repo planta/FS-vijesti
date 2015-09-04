@@ -8,7 +8,6 @@
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
         android:autoLink="web"
-        android:textColorLink="#FF0000"
         android:id="@+id/aboutText"
         android:padding="12dp"
         android:background="@drawable/read_article_bg"

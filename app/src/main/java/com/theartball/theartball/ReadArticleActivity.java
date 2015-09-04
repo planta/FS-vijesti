@@ -104,6 +104,10 @@ public class ReadArticleActivity extends ActionBarActivity {
                     intent.putExtra("autoplay", true);
                     startActivity(intent);
                     ReadArticleActivity.this.overridePendingTransition(R.anim.slide_up,R.anim.no_change);
+                } else if(url.contains(".jpg") || url.contains(".png")){
+                    Intent intent=new Intent(ReadArticleActivity.this, FullScreenImageActivity.class);
+                    intent.putExtra("imageURL",url);
+                    startActivity(intent);
                 }
                 else{
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
@@ -173,7 +177,7 @@ public class ReadArticleActivity extends ActionBarActivity {
         text="<span style='font-size:10pt; color:#444444'>"+text+"</span>";
         for (String link : links) {
             if (link.contains(".jpg") || link.contains(".png")) {
-                text = text.replace(link, String.format("<br><img src='%s' width='100%%'  /><br>", link));
+                text = text.replace(link, String.format("<br><a href='%s'><img src='%s' width='100%%'  /></a><br>", link, link));
             }  else if(link.contains(".youtube.com") || link.contains("youtu.be")){
                 if(link.length()>43) link=link.substring(0,43);
                 String videoID=link.substring(link.length()-11);
