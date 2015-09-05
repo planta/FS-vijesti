@@ -4,13 +4,16 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundGrey">
+    android:background="@color/backgroundGrey"
+    android:animateLayoutChanges="true">
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/searchField"
-        android:hint="Search..." />
+        android:hint="Search..."
+        android:maxLines="1"
+        android:visibility="gone"/>
 
     <ListView
         android:layout_width="match_parent"

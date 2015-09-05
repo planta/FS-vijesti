@@ -46,6 +46,7 @@ public class ArchiveActivity extends ActionBarActivity {
 
     final ArrayList<NewsItem> newsArray = new ArrayList<NewsItem>();
     String databaseURL="http://www.theartball.com/admin/iOS/getnews.php?archive=1";
+    ArrayList<NewsItem> tempNewsList=null;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,23 +55,28 @@ public class ArchiveActivity extends ActionBarActivity {
         AdView mAdView = (AdView)findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-
+        final ArchiveAdapter adapter = new ArchiveAdapter(getApplicationContext(), newsArray);
         final ListView archiveList = (ListView)findViewById(R.id.archiveList);
         archiveList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                NewsItem newsItem=newsArray.get(position);
+                NewsItem newsItem;
+                if (tempNewsList==null)
+                     newsItem = (NewsItem)adapter.getItem(position);
+                else
+                    newsItem = tempNewsList.get(position);
+
                 Intent intent;
-                if(newsItem.category.equals("Videos")){
-                    intent = new Intent(ArchiveActivity.this,PlayVideoActivity.class);
-                    if(newsItem.content.length()>43) newsItem.content=newsItem.content.substring(0,43);
-                    String videoID=newsItem.content.substring(newsItem.content.length()-11);
-                    intent.putExtra("Video-ID",videoID);
-                    intent.putExtra("autoplay",false);
+                if (newsItem.category.equals("Videos")) {
+                    intent = new Intent(ArchiveActivity.this, PlayVideoActivity.class);
+                    if (newsItem.content.length() > 43)
+                        newsItem.content = newsItem.content.substring(0, 43);
+                    String videoID = newsItem.content.substring(newsItem.content.length() - 11);
+                    intent.putExtra("Video-ID", videoID);
+                    intent.putExtra("autoplay", false);
                     startActivity(intent);
                     ArchiveActivity.this.overridePendingTransition(R.anim.slide_up, R.anim.no_change);
-                }
-                else {
+                } else {
                     intent = new Intent(ArchiveActivity.this, ReadArticleActivity.class);
 
                     intent.putExtra("newsTitle", newsItem.title);
@@ -82,7 +88,7 @@ public class ArchiveActivity extends ActionBarActivity {
             }
         });
 
-        final ArchiveAdapter adapter = new ArchiveAdapter(getApplicationContext(), newsArray);
+
 
         EditText searchField = (EditText)findViewById(R.id.searchField);
         searchField.addTextChangedListener(new TextWatcher() {
@@ -94,11 +100,11 @@ public class ArchiveActivity extends ActionBarActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 int textLength = s.length();
-                ArrayList<NewsItem> tempNewsList = new ArrayList<NewsItem>();
+                tempNewsList = new ArrayList<NewsItem>();
 
-                for(NewsItem item: newsArray) {
-                    if(textLength <= item.title.length()) {
-                        if(item.title.toLowerCase().contains(s.toString().toLowerCase())) {
+                for (NewsItem item : newsArray) {
+                    if (textLength <= item.title.length()) {
+                        if (item.title.toLowerCase().contains(s.toString().toLowerCase())) {
                             tempNewsList.add(item);
                         }
                     }
@@ -123,6 +129,7 @@ public class ArchiveActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        menu.findItem(R.id.action_search).setVisible(true);
         return true;
     }
 
@@ -148,6 +155,12 @@ public class ArchiveActivity extends ActionBarActivity {
             case R.id.action_about:
                 intent = new Intent(this, AboutActivity.class);
                 startActivity(intent);
+                return true;
+            case R.id.action_search:
+                EditText et=(EditText)findViewById(R.id.searchField);
+                if(et.getVisibility()==View.VISIBLE) et.setVisibility(View.GONE);
+                else et.setVisibility(View.VISIBLE);
+
                 return true;
         }
 
