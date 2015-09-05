@@ -58,6 +58,11 @@ public class ReadArticleActivity extends ActionBarActivity {
     String content;
     String category;
     String author;
+<<<<<<< HEAD
+=======
+    String currentTab;
+    int imgWidth;
+>>>>>>> origin/master
     ScrollView scrollView;
     String imageURL;
 
@@ -75,7 +80,11 @@ public class ReadArticleActivity extends ActionBarActivity {
         date = articleData.getString("newsDate");
         category = articleData.getString("newsCategory");
         author = articleData.getString("newsAuthor");
+<<<<<<< HEAD
         imageURL=articleData.getString("ImageURL");
+=======
+        currentTab = articleData.getString("currentTab");
+>>>>>>> origin/master
 
         TextView titleTextView = (TextView) findViewById(R.id.titleTextView);
         titleTextView.setText(title);
@@ -162,6 +171,13 @@ public class ReadArticleActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra("currentTab", currentTab);
+        setResult(RESULT_OK, intent);
     }
 
     public static String[] extractLinks(String text) {
