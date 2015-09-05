@@ -58,11 +58,9 @@ public class ReadArticleActivity extends ActionBarActivity {
     String content;
     String category;
     String author;
-<<<<<<< HEAD
-=======
+
     String currentTab;
-    int imgWidth;
->>>>>>> origin/master
+
     ScrollView scrollView;
     String imageURL;
 
@@ -80,12 +78,11 @@ public class ReadArticleActivity extends ActionBarActivity {
         date = articleData.getString("newsDate");
         category = articleData.getString("newsCategory");
         author = articleData.getString("newsAuthor");
-<<<<<<< HEAD
-        imageURL=articleData.getString("ImageURL");
-=======
-        currentTab = articleData.getString("currentTab");
->>>>>>> origin/master
 
+
+        imageURL=articleData.getString("ImageURL");
+
+        currentTab = articleData.getString("currentTab");
         TextView titleTextView = (TextView) findViewById(R.id.titleTextView);
         titleTextView.setText(title);
         TextView dateTextView = (TextView) findViewById(R.id.date);
@@ -95,7 +92,7 @@ public class ReadArticleActivity extends ActionBarActivity {
         if(category == null) {
             categoryTextView.setText("Author: " + author);
             ImageView authorImage=(ImageView)findViewById(R.id.authorImage);
-//            authorImage.setVisibility(View.VISIBLE);
+            authorImage.setVisibility(View.VISIBLE);
             Picasso.with(ReadArticleActivity.this).load(imageURL).placeholder(R.drawable.placeholder).resize(500, 500).centerCrop().into(authorImage);
         } else {
             categoryTextView.setText("Category: " + category);
@@ -196,14 +193,20 @@ public class ReadArticleActivity extends ActionBarActivity {
 
         for (String link : links) {
             if (link.contains(".jpg") || link.contains(".png")) {
-                text = text.replace(link, String.format("<br><a href='%s'><img src='%s' width='100%%'  /></a><p align='center' style='color:#777;font-size:7pt;'>+Click on image to see in fullscreen</p><br><br>", link, link));
+                text = text.replace(link, String.format("<br><br><a href='%s'><img src='%s' width='100%%'  /></a><p align='center' style='color:#777;font-size:7pt;'>+Click on image to see in fullscreen</p><br><br>", link, link));
             }  else if(link.contains(".youtube.com") || link.contains("youtu.be")){
                 if(link.length()>43) link=link.substring(0,43);
                 String videoID=link.substring(link.length()-11);
 //                text = text.replace(link, String.format("<br><iframe src='https://www.youtube.com/embed/%s' width='100%%' height='%d' frameborder='0'></iframe><br>",videoID,(int)getResources().getDimension(R.dimen.embed_video),link));
-                  text = text.replace(link, String.format("<br><div style='position:relative; top:0; left:0;'><a href='%s'><img src='http://img.youtube.com/vi/%s/0.jpg' style='position: relative; top: 0; left: 0;' width='100%%'/><img src='http://www.theartball.com/images/ytplayericon.png' style='position: absolute; left: 50%%; top: 50%%; margin: -40 0 0 -40;'/></a></div><br>",link,videoID));
+                  text = text.replace(link, String.format("<br><br><div style='position:relative; top:0; left:0;'><a href='%s'><img src='http://img.youtube.com/vi/%s/0.jpg' style='position: relative; top: 0; left: 0;' width='100%%'/><img src='http://www.theartball.com/images/ytplayericon.png' style='position: absolute; left: 50%%; top: 50%%; margin: -40 0 0 -40;'/></a></div><br><br>",link,videoID));
             } else {
-                text = text.replace(link, String.format("<br><a href='%s'> %s </a><br>", link, link));
+                int startUrl=text.indexOf(link);
+                if(startUrl-1>=0)
+                    if(text.charAt(startUrl-1)=='@'){
+
+                    }
+                else
+                    text = text.replace(link, String.format("<br><a href='%s'> %s </a><br>", link, link));
             }
         }
 
