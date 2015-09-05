@@ -5,39 +5,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -50,6 +35,17 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
 
     final ArrayList<NewsItem> newsArray = new ArrayList<NewsItem>();
     String databaseURL="http://www.theartball.com/admin/iOS/getnews.php";
+
+    String currentTab;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                currentTab = data.getStringExtra("activeTab");
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +74,23 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         actionBar.addTab(videosTab);
         actionBar.addTab(otherTab);
 
+        if(currentTab != null) {
+            switch (currentTab) {
+                case "all":
+                    actionBar.selectTab(allTab);
+                    break;
+                case "comps":
+                    actionBar.selectTab(compsTab);
+                    break;
+                case "videos":
+                    actionBar.selectTab(videosTab);
+                    break;
+                case "other":
+                    actionBar.selectTab(otherTab);
+                    break;
+            }
+        }
+
         GridView gridView = (GridView)findViewById(R.id.newsGrid);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -90,7 +103,14 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                     String videoID=newsItem.content.substring(newsItem.content.length()-11);
                     intent.putExtra("Video-ID",videoID);
                     intent.putExtra("autoplay",false);
-                    startActivity(intent);
+
+                    if(currentTab != null) {
+                        intent.putExtra("currentTab", currentTab);
+                    } else {
+                        intent.putExtra("currentTab", "all");
+                    }
+
+                    startActivityForResult(intent, 1);
                     MainActivity.this.overridePendingTransition(R.anim.slide_up, R.anim.no_change);
                 }
                 else {
@@ -100,7 +120,14 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                     intent.putExtra("newsContent", newsItem.content);
                     intent.putExtra("newsDate", newsItem.date);
                     intent.putExtra("newsCategory", newsItem.category);
-                    startActivity(intent);
+
+                    if(currentTab != null) {
+                        intent.putExtra("currentTab", currentTab);
+                    } else {
+                        intent.putExtra("currentTab", "all");
+                    }
+
+                    startActivityForResult(intent, 1);
                 }
             }
         });
@@ -150,16 +177,20 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         switch (tab.getText().toString()){
             case "Comps":
-                databaseURL="http://www.theartball.com/admin/iOS/getnews.php?category=competitions";
+                databaseURL = "http://www.theartball.com/admin/iOS/getnews.php?category=competitions";
+                currentTab = "comps";
                 break;
             case "Videos":
-                databaseURL="http://www.theartball.com/admin/iOS/getnews.php?category=videos";
+                databaseURL = "http://www.theartball.com/admin/iOS/getnews.php?category=videos";
+                currentTab = "videos";
                 break;
             case "All":
                 databaseURL="http://www.theartball.com/admin/iOS/getnews.php";
+                currentTab = "all";
                 break;
             case "Other":
                 databaseURL="http://www.theartball.com/admin/iOS/getnews.php?category=other";
+                currentTab = "other";
                 break;
         }
         new NewsAsyncTask().execute();

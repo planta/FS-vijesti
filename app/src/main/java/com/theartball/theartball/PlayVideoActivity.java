@@ -1,5 +1,6 @@
 package com.theartball.theartball;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,12 +15,13 @@ import com.google.android.youtube.player.YouTubePlayerView;
 
 public class PlayVideoActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener, YouTubePlayer.OnFullscreenListener {
 
-
     private static final String DEVELOPER_KEY = "AIzaSyAVsan7fRDpbJNO1L5vn-MVKFbVuSMHkhs";
 
     String videoID;
     boolean autoplay;
     ImageView hideicon;
+
+    String currentTab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +37,9 @@ public class PlayVideoActivity extends YouTubeBaseActivity implements YouTubePla
             }
         });
         Bundle extras=getIntent().getExtras();
-        videoID=extras.getString("Video-ID");
-        autoplay=extras.getBoolean("autoplay");
+        videoID = extras.getString("Video-ID");
+        autoplay = extras.getBoolean("autoplay");
+        currentTab = extras.getString("currentTab");
         YouTubePlayerView youTubePlayerView = (YouTubePlayerView) findViewById(R.id.youtube_player);
         youTubePlayerView.initialize(DEVELOPER_KEY, this);
     }
@@ -61,6 +64,13 @@ public class PlayVideoActivity extends YouTubeBaseActivity implements YouTubePla
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra("currentTab", currentTab);
+        setResult(RESULT_OK, intent);
     }
 
     @Override
