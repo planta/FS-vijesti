@@ -34,5 +34,6 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.google.apis:google-api-services-youtube:v3-rev120-1.19.0'
     compile 'com.github.chrisbanes.photoview:library:+'
+    compile 'com.felipecsl.asymmetricgridview:library:2.0.1'
 
 }

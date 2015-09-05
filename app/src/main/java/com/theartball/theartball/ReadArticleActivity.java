@@ -177,7 +177,7 @@ public class ReadArticleActivity extends ActionBarActivity {
         text="<span style='font-size:10pt; color:#444444'>"+text+"</span>";
         for (String link : links) {
             if (link.contains(".jpg") || link.contains(".png")) {
-                text = text.replace(link, String.format("<br><a href='%s'><img src='%s' width='100%%'  /></a><br>", link, link));
+                text = text.replace(link, String.format("<br><a href='%s'><img src='%s' width='100%%'  /></a><p align='center' style='color:#777;font-size:7pt;'>+Click on image to see in fullscreen</p><br><br>", link, link));
             }  else if(link.contains(".youtube.com") || link.contains("youtu.be")){
                 if(link.length()>43) link=link.substring(0,43);
                 String videoID=link.substring(link.length()-11);
