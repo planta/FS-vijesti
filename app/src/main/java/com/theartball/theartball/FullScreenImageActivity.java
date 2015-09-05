@@ -39,8 +39,6 @@ public class FullScreenImageActivity extends ActionBarActivity {
         String url=extra.getString("imageURL");
 
         new DownloadImageTask(imageView).execute(url);
-
-
     }
 
     @Override

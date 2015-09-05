@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         AdView mAdView = (AdView)findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
@@ -64,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
 
         ActionBar.Tab allTab = actionBar.newTab().setText(getString(R.string.title_section1));
         allTab.setTabListener(this);
@@ -80,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         actionBar.addTab(videosTab);
         actionBar.addTab(otherTab);
 
-        GridView gridView=(GridView)findViewById(R.id.newsGrid);
+        GridView gridView = (GridView)findViewById(R.id.newsGrid);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -104,10 +102,8 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                     intent.putExtra("newsCategory", newsItem.category);
                     startActivity(intent);
                 }
-
             }
         });
-//        new NewsAsyncTask().execute();
     }
 
 

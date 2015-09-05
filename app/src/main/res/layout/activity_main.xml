@@ -17,7 +17,7 @@
         android:stretchMode="columnWidth"
         android:id="@+id/newsGrid"
         android:fadingEdge="none"
-        />
+        android:scrollbars="none" />
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
@@ -26,8 +26,6 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/banner_ad_unit_id">
-
-    </com.google.android.gms.ads.AdView>
+        ads:adUnitId="@string/banner_ad_unit_id" />
 
 </LinearLayout>

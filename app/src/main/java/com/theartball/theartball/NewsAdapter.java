@@ -33,7 +33,6 @@ public class NewsAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<NewsItem> listaVijesti;
 
-
     public NewsAdapter(Context c, ArrayList<NewsItem> newsList) {
         context = c;
         listaVijesti = newsList;
@@ -66,51 +65,18 @@ public class NewsAdapter extends BaseAdapter {
         } else {
             gridCellView = (View)convertView;
         }
-        NewsItem newsItem=listaVijesti.get(position);
+        NewsItem newsItem = listaVijesti.get(position);
         gridCellView = layoutInflater.inflate(R.layout.small_news_cell, null);
         TextView title = (TextView)gridCellView.findViewById(R.id.newsTitle);
         title.setText(newsItem.title);
-        ImageView newsImage=(ImageView)gridCellView.findViewById(R.id.newsImage);
+        ImageView newsImage = (ImageView)gridCellView.findViewById(R.id.newsImage);
         Picasso.with(context).load(newsItem.imageURL).placeholder(R.drawable.placeholder).resize(300,300).centerCrop().into(newsImage);
 
-        ImageView playIcon=(ImageView)gridCellView.findViewById(R.id.playicon);
+        ImageView playIcon = (ImageView)gridCellView.findViewById(R.id.playicon);
         playIcon.setImageResource(R.drawable.player);
         if(newsItem.category.equals("Videos")){
             playIcon.setVisibility(View.VISIBLE);
         }
         return gridCellView;
     }
-
-
-
-//    private class ImageDownloadTask extends AsyncTask<String, String, Bitmap>{
-//
-//
-//        ImageView tempImageView;
-//
-//        public ImageDownloadTask( ImageView imageView){
-//            tempImageView=imageView;
-//        }
-//
-//        @Override
-//        protected Bitmap doInBackground(String... params) {
-//            Bitmap imgBitmap=null;
-//            try {
-//                URL imageLink=new URL(params[0]);
-//                InputStream in = imageLink.openStream();
-//                imgBitmap=BitmapFactory.decodeStream(in);
-//            } catch (MalformedURLException e) {
-//                e.printStackTrace();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            return imgBitmap;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Bitmap bitmap) {
-//            super.onPostExecute(bitmap);
-//            tempImageView.setImageBitmap(bitmap);
-//        }
-//    }
 }

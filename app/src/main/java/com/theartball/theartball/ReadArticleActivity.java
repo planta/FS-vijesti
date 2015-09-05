@@ -51,7 +51,6 @@ import java.util.regex.Matcher;
  */
 public class ReadArticleActivity extends ActionBarActivity {
 
-
     String title;
     String date;
     String content;
@@ -59,7 +58,6 @@ public class ReadArticleActivity extends ActionBarActivity {
     int imgWidth;
     ScrollView scrollView;
     TextView contentTextView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,16 +79,11 @@ public class ReadArticleActivity extends ActionBarActivity {
         dateTextView.setText("Date added: " + date);
         TextView categoryTextView = (TextView) findViewById(R.id.category);
         categoryTextView.setText("Category: " + category);
-//        contentTextView=(TextView)findViewById(R.id.content);
         WebView contentTextView = (WebView) findViewById(R.id.content);
 
 
         String[] links = extractLinks(content);
         content = addTagsToLinks(content, links);
-//        Spanned spanned = Html.fromHtml(content, this, null);
-//        contentTextView.setText(spanned);
-//        contentTextView.setText(Html.fromHtml(content));
-//        contentTextView.setWebViewClient(new WebChromeClient());
         contentTextView.getSettings().setJavaScriptEnabled(true);
         contentTextView.setWebChromeClient(new WebChromeClient() {
 
@@ -118,13 +111,8 @@ public class ReadArticleActivity extends ActionBarActivity {
             }
         });
 
-//        contentTextView.loadData(content, "text/html", null);
         contentTextView.loadDataWithBaseURL("",content,"text/html","UTF-8","");
-//        contentTextView.setBackgroundColor(0x00000000);
         contentTextView.setBackgroundColor(ContextCompat.getColor(ReadArticleActivity.this, R.color.lighterGrey));
-//
-//        contentTextView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
-
     }
 
     @Override
@@ -145,6 +133,9 @@ public class ReadArticleActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         switch (id) {
+            case android.R.id.home:
+                finish();
+                return true;
             case R.id.action_archive:
                 intent = new Intent(this, ArchiveActivity.class);
                 startActivity(intent);
@@ -175,6 +166,7 @@ public class ReadArticleActivity extends ActionBarActivity {
 
     public String addTagsToLinks(String text, String[] links) {
         text="<span style='font-size:10pt; color:#444444'>"+text+"</span>";
+
         for (String link : links) {
             if (link.contains(".jpg") || link.contains(".png")) {
                 text = text.replace(link, String.format("<br><a href='%s'><img src='%s' width='100%%'  /></a><p align='center' style='color:#777;font-size:7pt;'>+Click on image to see in fullscreen</p><br><br>", link, link));
@@ -186,13 +178,10 @@ public class ReadArticleActivity extends ActionBarActivity {
             } else {
                 text = text.replace(link, String.format("<br><a href='%s'> %s </a><br>", link, link));
             }
-
         }
+
         return text;
-
     }
-
-
 }
 
 
