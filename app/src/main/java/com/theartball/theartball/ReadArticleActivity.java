@@ -177,6 +177,7 @@ public class ReadArticleActivity extends ActionBarActivity {
         Intent intent = new Intent();
         intent.putExtra("currentTab", currentTab);
         setResult(RESULT_OK, intent);
+        super.onBackPressed();
     }
 
     public static String[] extractLinks(String text) {
@@ -200,7 +201,7 @@ public class ReadArticleActivity extends ActionBarActivity {
                 if(link.length()>43) link=link.substring(0,43);
                 String videoID=link.substring(link.length()-11);
 //                text = text.replace(link, String.format("<br><iframe src='https://www.youtube.com/embed/%s' width='100%%' height='%d' frameborder='0'></iframe><br>",videoID,(int)getResources().getDimension(R.dimen.embed_video),link));
-                  text = text.replace(link, String.format("<br><br><div style='position:relative; top:0; left:0;'><a href='%s'><img src='http://img.youtube.com/vi/%s/0.jpg' style='position: relative; top: 0; left: 0;' width='100%%'/><img src='http://www.theartball.com/images/ytplayericon.png' style='position: absolute; left: 50%%; top: 50%%; margin: -40 0 0 -40;'/></a></div><br><br>",link,videoID));
+                  text = text.replace(link, String.format("<br><br><div style='position:relative; top:0; left:0;'><a href='%s'><img src='http://img.youtube.com/vi/%s/0.jpg' style='position: relative; top: 0; left: 0;' width='100%%'/><img src='http://www.theartball.com/images/ytplay.jpg' style='position: absolute; left: 50%%; top: 50%%; margin: -40 0 0 -40;'/></a></div><br><br>",link,videoID));
             } else {
                 int startUrl=text.indexOf(link);
                 if(startUrl-1>=0)
