@@ -10,12 +10,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -52,7 +55,7 @@ public class ArchiveActivity extends ActionBarActivity {
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
-        ListView archiveList = (ListView)findViewById(R.id.archiveList);
+        final ListView archiveList = (ListView)findViewById(R.id.archiveList);
         archiveList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -76,6 +79,37 @@ public class ArchiveActivity extends ActionBarActivity {
                     intent.putExtra("newsCategory", newsItem.category);
                     startActivity(intent);
                 }
+            }
+        });
+
+        final ArchiveAdapter adapter = new ArchiveAdapter(getApplicationContext(), newsArray);
+
+        EditText searchField = (EditText)findViewById(R.id.searchField);
+        searchField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int textLength = s.length();
+                ArrayList<NewsItem> tempNewsList = new ArrayList<NewsItem>();
+
+                for(NewsItem item: newsArray) {
+                    if(textLength <= item.title.length()) {
+                        if(item.title.toLowerCase().contains(s.toString().toLowerCase())) {
+                            tempNewsList.add(item);
+                        }
+                    }
+                }
+                ArchiveAdapter tempAdapter = new ArchiveAdapter(getApplicationContext(), tempNewsList);
+                archiveList.setAdapter(tempAdapter);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
