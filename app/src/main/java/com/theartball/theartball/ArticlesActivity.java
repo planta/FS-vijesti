@@ -61,6 +61,7 @@ public class ArticlesActivity extends ActionBarActivity {
                 intent.putExtra("newsContent", articleItem.content);
                 intent.putExtra("newsDate", articleItem.date);
                 intent.putExtra("newsAuthor", articleItem.author);
+                intent.putExtra("ImageURL",articleItem.imageURL);
                 startActivity(intent);
             }
         });

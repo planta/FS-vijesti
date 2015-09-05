@@ -26,6 +26,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -34,6 +35,7 @@ import com.google.android.youtube.player.YouTubeIntents;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -56,9 +58,8 @@ public class ReadArticleActivity extends ActionBarActivity {
     String content;
     String category;
     String author;
-    int imgWidth;
     ScrollView scrollView;
-    TextView contentTextView;
+    String imageURL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,7 @@ public class ReadArticleActivity extends ActionBarActivity {
         date = articleData.getString("newsDate");
         category = articleData.getString("newsCategory");
         author = articleData.getString("newsAuthor");
+        imageURL=articleData.getString("ImageURL");
 
         TextView titleTextView = (TextView) findViewById(R.id.titleTextView);
         titleTextView.setText(title);
@@ -83,6 +85,9 @@ public class ReadArticleActivity extends ActionBarActivity {
 
         if(category == null) {
             categoryTextView.setText("Author: " + author);
+            ImageView authorImage=(ImageView)findViewById(R.id.authorImage);
+//            authorImage.setVisibility(View.VISIBLE);
+            Picasso.with(ReadArticleActivity.this).load(imageURL).placeholder(R.drawable.placeholder).resize(500, 500).centerCrop().into(authorImage);
         } else {
             categoryTextView.setText("Category: " + category);
         }
