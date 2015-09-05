@@ -55,6 +55,7 @@ public class ReadArticleActivity extends ActionBarActivity {
     String date;
     String content;
     String category;
+    String author;
     int imgWidth;
     ScrollView scrollView;
     TextView contentTextView;
@@ -72,15 +73,21 @@ public class ReadArticleActivity extends ActionBarActivity {
         content = articleData.getString("newsContent");
         date = articleData.getString("newsDate");
         category = articleData.getString("newsCategory");
+        author = articleData.getString("newsAuthor");
 
         TextView titleTextView = (TextView) findViewById(R.id.titleTextView);
         titleTextView.setText(title);
         TextView dateTextView = (TextView) findViewById(R.id.date);
         dateTextView.setText("Date added: " + date);
         TextView categoryTextView = (TextView) findViewById(R.id.category);
-        categoryTextView.setText("Category: " + category);
-        WebView contentTextView = (WebView) findViewById(R.id.content);
 
+        if(category == null) {
+            categoryTextView.setText("Author: " + author);
+        } else {
+            categoryTextView.setText("Category: " + category);
+        }
+
+        WebView contentTextView = (WebView) findViewById(R.id.content);
 
         String[] links = extractLinks(content);
         content = addTagsToLinks(content, links);
@@ -120,7 +127,6 @@ public class ReadArticleActivity extends ActionBarActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

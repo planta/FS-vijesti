@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                NewsItem newsItem=newsArray.get(position);
+                NewsItem newsItem = newsArray.get(position);
                 Intent intent;
                 if(newsItem.category.equals("Videos")){
                     intent = new Intent(MainActivity.this,PlayVideoActivity.class);

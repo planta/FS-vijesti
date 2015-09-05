@@ -55,6 +55,7 @@ public class ArchiveActivity extends ActionBarActivity {
         AdView mAdView = (AdView)findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+
         final ArchiveAdapter adapter = new ArchiveAdapter(getApplicationContext(), newsArray);
         final ListView archiveList = (ListView)findViewById(R.id.archiveList);
         archiveList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -87,8 +88,6 @@ public class ArchiveActivity extends ActionBarActivity {
                 }
             }
         });
-
-
 
         EditText searchField = (EditText)findViewById(R.id.searchField);
         searchField.addTextChangedListener(new TextWatcher() {
