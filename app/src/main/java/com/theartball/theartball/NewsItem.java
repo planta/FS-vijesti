@@ -1,11 +1,15 @@
 package com.theartball.theartball;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.support.annotation.NonNull;
+
+import com.felipecsl.asymmetricgridview.library.model.AsymmetricItem;
 
 /**
  * Created by Uki on 8/30/15.
  */
-public class NewsItem {
+public class NewsItem  implements AsymmetricItem{
 
     String title;
     String content;
@@ -13,6 +17,7 @@ public class NewsItem {
     String imageURL;
     String date;
     boolean important;
+    int columnSpan;
 
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
@@ -37,5 +42,30 @@ public class NewsItem {
     public void setImportant(boolean important){
         this.important=important;
     }
+
+    @Override
+    public int getColumnSpan() {
+        return important?2:1;
+    }
+
+    public void setColumnSpan(int columnSpan){
+        this.columnSpan=columnSpan;
+    }
+
+    @Override
+    public int getRowSpan() {
+        return important?2:1;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(columnSpan);
+    }
+
 
 }

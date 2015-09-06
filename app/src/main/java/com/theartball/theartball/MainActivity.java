@@ -24,6 +24,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.felipecsl.asymmetricgridview.library.Utils;
+import com.felipecsl.asymmetricgridview.library.widget.AsymmetricGridView;
+import com.felipecsl.asymmetricgridview.library.widget.AsymmetricGridViewAdapter;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -91,7 +94,10 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             }
         }
 
-        GridView gridView = (GridView)findViewById(R.id.newsGrid);
+        AsymmetricGridView gridView = (AsymmetricGridView)findViewById(R.id.newsGrid);
+        gridView.setRequestedColumnCount(2);
+        gridView.setAllowReordering(true);
+        gridView.setRequestedHorizontalSpacing(Utils.dpToPx(this, 2));
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -238,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                     newsItem.setImageURL(newsItemJSON.optString("image"));
                     newsItem.setDate(newsItemJSON.optString("date"));
 
-                    if(newsItemJSON.optString("important").equals("1")){
+                    if(newsItemJSON.optString("important").equals("1") || i==0){
                         newsItem.setImportant(true);
                     } else {
                         newsItem.setImportant(false);
@@ -247,9 +253,18 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                     newsArray.add(newsItem);
 
                 }
+                int brImportant=0;
+                for(int i=0;i<newsArray.size();i++){
+                    if(newsArray.get(i).important) brImportant++;
+                }
+                if(brImportant%2==0) newsArray.remove(newsArray.size()-1);
 
-                GridView gridView = (GridView)findViewById(R.id.newsGrid);
-                gridView.setAdapter(new NewsAdapter(getApplicationContext(), newsArray));
+                AsymmetricGridView gridView = (AsymmetricGridView)findViewById(R.id.newsGrid);
+
+//                gridView.setAdapter(new NewsAdapter(getApplicationContext(), newsArray));
+                AsymmetricGridViewAdapter asymmetricAdapter =
+                        new AsymmetricGridViewAdapter<>(MainActivity.this, gridView, new NewsAdapter(getApplicationContext(), newsArray));
+                gridView.setAdapter(asymmetricAdapter);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
