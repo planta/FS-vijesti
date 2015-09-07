@@ -8,7 +8,8 @@
         android:id="@+id/newsImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop"
+        android:layout_marginTop="2dp" />
 
     <ImageView
         android:layout_width="@dimen/playicon_size"
