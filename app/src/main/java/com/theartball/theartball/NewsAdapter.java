@@ -66,13 +66,23 @@ public class NewsAdapter extends BaseAdapter {
             gridCellView = (View)convertView;
         }
         NewsItem newsItem = listaVijesti.get(position);
-        gridCellView = layoutInflater.inflate(R.layout.small_news_cell, null);
-        TextView title = (TextView)gridCellView.findViewById(R.id.newsTitle);
-        title.setText(newsItem.title);
-        ImageView newsImage = (ImageView)gridCellView.findViewById(R.id.newsImage);
-        Picasso.with(context).load(newsItem.imageURL).placeholder(R.drawable.placeholder).resize(300,300).centerCrop().into(newsImage);
+        Boolean important=newsItem.important;
 
-        ImageView playIcon = (ImageView)gridCellView.findViewById(R.id.playicon);
+        gridCellView = layoutInflater.inflate(important?R.layout.big_news_cell:R.layout.small_news_cell, null);
+        TextView title;
+        ImageView newsImage;
+        ImageView playIcon;
+        if(important) {
+            title = (TextView) gridCellView.findViewById(R.id.newsTitleBig);
+            newsImage = (ImageView) gridCellView.findViewById(R.id.newsImageBig);
+            playIcon = (ImageView)gridCellView.findViewById(R.id.playiconBig);
+        }else {
+            title = (TextView) gridCellView.findViewById(R.id.newsTitle);
+            newsImage = (ImageView) gridCellView.findViewById(R.id.newsImage);
+            playIcon = (ImageView)gridCellView.findViewById(R.id.playicon);
+        }
+        title.setText(newsItem.title);
+        Picasso.with(context).load(newsItem.imageURL).placeholder(R.drawable.placeholder).resize(300,300).centerCrop().into(newsImage);
         playIcon.setImageResource(R.drawable.player);
         if(newsItem.category.equals("Videos")){
             playIcon.setVisibility(View.VISIBLE);

@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         protected void onPostExecute(String result) {
 
             result="{ \"Android\" :"+result+"}";
-            progressDialog.hide();
+            progressDialog.dismiss();
             try {
                 JSONObject allNews=new JSONObject(result);
                 JSONArray allNewsArray=allNews.optJSONArray("Android");
@@ -253,15 +253,14 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                     newsArray.add(newsItem);
 
                 }
-                int brImportant=0;
+                int brNotImportant=0;
                 for(int i=0;i<newsArray.size();i++){
-                    if(newsArray.get(i).important) brImportant++;
+                    if(!newsArray.get(i).important) brNotImportant++;
                 }
-                if(brImportant%2==0) newsArray.remove(newsArray.size()-1);
+                if(brNotImportant%2!=0) newsArray.remove(newsArray.size()-1);
 
                 AsymmetricGridView gridView = (AsymmetricGridView)findViewById(R.id.newsGrid);
 
-//                gridView.setAdapter(new NewsAdapter(getApplicationContext(), newsArray));
                 AsymmetricGridViewAdapter asymmetricAdapter =
                         new AsymmetricGridViewAdapter<>(MainActivity.this, gridView, new NewsAdapter(getApplicationContext(), newsArray));
                 gridView.setAdapter(asymmetricAdapter);

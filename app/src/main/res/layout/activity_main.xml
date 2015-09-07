@@ -7,17 +7,18 @@
     >
 
     <com.felipecsl.asymmetricgridview.library.widget.AsymmetricGridView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:verticalSpacing="2dp"
-        android:horizontalSpacing="2dp"
+        android:verticalSpacing="3dp"
+        android:horizontalSpacing="3dp"
         android:clipToPadding="false"
         android:padding="8dp"
         android:stretchMode="columnWidth"
         android:id="@+id/newsGrid"
         android:fadingEdge="none"
         android:scrollbars="none" />
+
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"

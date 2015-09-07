@@ -3,6 +3,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="cell_title_size">13sp</dimen>
+    <dimen name="cell_title_size_big">22sp</dimen>
+    <dimen name="playicon_size">100dp</dimen>
     <dimen name="title_font_size">25sp</dimen>
     <dimen name="embed_video">100dp</dimen>
 </resources>

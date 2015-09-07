@@ -186,7 +186,7 @@ public class ArchiveActivity extends ActionBarActivity {
         protected void onPostExecute(String result) {
 
             result="{ \"Android\" :"+result+"}";
-            progressDialog.hide();
+            progressDialog.dismiss();
             try {
                 JSONObject allNews = new JSONObject(result);
                 JSONArray allNewsArray = allNews.optJSONArray("Android");

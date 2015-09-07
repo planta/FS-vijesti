@@ -127,7 +127,7 @@ public class ArticlesActivity extends ActionBarActivity {
         protected void onPostExecute(String result) {
 
             result="{ \"Android\" :"+result+"}";
-            progressDialog.hide();
+            progressDialog.dismiss();
             try {
                 JSONObject allArticles = new JSONObject(result);
                 JSONArray allArticlesArray = allArticles.optJSONArray("Android");

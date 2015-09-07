@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+     android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <com.theartball.theartball.SquareImageView
-        android:id="@+id/newsImage"
+        android:id="@+id/newsImageBig"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"/>
@@ -14,15 +13,15 @@
         android:layout_width="@dimen/playicon_size"
         android:layout_height="@dimen/playicon_size"
         android:layout_gravity="center"
-        android:id="@+id/playicon"
+        android:id="@+id/playiconBig"
         android:visibility="invisible" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/cell_title_size"
+        android:textSize="@dimen/cell_title_size_big"
         android:text="Sample Text  - Medium"
-        android:id="@+id/newsTitle"
+        android:id="@+id/newsTitleBig"
         android:paddingBottom="8dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
@@ -30,4 +29,5 @@
         android:layout_gravity="bottom"
         android:textColor="@android:color/white"
         android:background="@drawable/gradient"/>
+
 </FrameLayout>
