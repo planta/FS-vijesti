@@ -8,8 +8,8 @@ android {
         applicationId "com.theartball.theartball"
         minSdkVersion 9
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 11
+        versionName "1.1"
     }
     buildTypes {
         debug {
@@ -35,5 +35,7 @@ dependencies {
     compile 'com.google.apis:google-api-services-youtube:v3-rev120-1.19.0'
     compile 'com.github.chrisbanes.photoview:library:+'
     compile 'com.felipecsl.asymmetricgridview:library:2.0.1'
+    compile 'com.pushbots:pushbots-lib:2.0.13@aar'
+    compile 'com.android.support:support-v4:21.0.0'
 
 }

@@ -29,6 +29,7 @@ import com.felipecsl.asymmetricgridview.library.widget.AsymmetricGridView;
 import com.felipecsl.asymmetricgridview.library.widget.AsymmetricGridViewAdapter;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.pushbots.push.Pushbots;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,7 +37,7 @@ import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements ActionBar.TabListener {
 
-    final ArrayList<NewsItem> newsArray = new ArrayList<NewsItem>();
+    ArrayList<NewsItem> newsArray = new ArrayList<NewsItem>();
     String databaseURL="http://www.theartball.com/admin/iOS/getnews.php";
 
     String currentTab;
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
+        Pushbots.sharedInstance().init(this);
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -253,11 +255,16 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                     newsArray.add(newsItem);
 
                 }
+                newsArray=gridAlgoritam(newsArray);
                 int brNotImportant=0;
+                int lastNotImportantIndex=0;
                 for(int i=0;i<newsArray.size();i++){
-                    if(!newsArray.get(i).important) brNotImportant++;
+                    if(!newsArray.get(i).important) {
+                        brNotImportant++;
+                        lastNotImportantIndex=i;
+                    }
                 }
-                if(brNotImportant%2!=0) newsArray.remove(newsArray.size()-1);
+                if(brNotImportant%2!=0) newsArray.remove(lastNotImportantIndex);
 
                 AsymmetricGridView gridView = (AsymmetricGridView)findViewById(R.id.newsGrid);
 
@@ -268,6 +275,28 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                 e.printStackTrace();
             }
 
+        }
+
+        private ArrayList<NewsItem> gridAlgoritam(ArrayList<NewsItem> vesti){
+            int lastImportantIndex=0;
+            for(int i=1;i<vesti.size();i++){
+                if(vesti.get(i).important){
+                    if((i-lastImportantIndex)%2==0){
+                        ArrayList<NewsItem> tmpArray=vesti;
+                        NewsItem previousNews=vesti.get(i-1);
+                        NewsItem importantNews=vesti.get(i);
+
+                        tmpArray.set(i,previousNews);
+                        tmpArray.set(i-1,importantNews);
+
+                        vesti=tmpArray;
+                        lastImportantIndex=i-1;
+                    }
+                    else
+                        lastImportantIndex=i;
+                }
+            }
+        return vesti;
         }
 
         @Override

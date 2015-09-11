@@ -27,15 +27,15 @@ public class PlayVideoActivity extends YouTubeBaseActivity implements YouTubePla
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_video);
-        hideicon=(ImageView)findViewById(R.id.hideicon);
-        hideicon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                finish();
-                overridePendingTransition(R.anim.no_change, R.anim.slide_down);
-            }
-        });
+//        hideicon=(ImageView)findViewById(R.id.hideicon);
+//        hideicon.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                finish();
+//                overridePendingTransition(R.anim.no_change, R.anim.slide_down);
+//            }
+//        });
         Bundle extras=getIntent().getExtras();
         videoID = extras.getString("Video-ID");
         autoplay = extras.getBoolean("autoplay");
@@ -71,6 +71,7 @@ public class PlayVideoActivity extends YouTubeBaseActivity implements YouTubePla
         Intent intent = new Intent();
         intent.putExtra("currentTab", currentTab);
         setResult(RESULT_OK, intent);
+        super.onBackPressed();
     }
 
     @Override
@@ -89,9 +90,9 @@ public class PlayVideoActivity extends YouTubeBaseActivity implements YouTubePla
 
     @Override
     public void onFullscreen(boolean fullscreen) {
-        if(fullscreen)
-            hideicon.setVisibility(View.GONE);
-        else
-            hideicon.setVisibility(View.VISIBLE);
+//        if(fullscreen)
+//            hideicon.setVisibility(View.GONE);
+//        else
+//            hideicon.setVisibility(View.VISIBLE);
     }
 }

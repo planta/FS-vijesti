@@ -6,21 +6,12 @@
 
     tools:context="com.theartball.theartball.PlayVideoActivity">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/hideicon"
-        android:src="@drawable/hideicon"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        />
 
     <com.google.android.youtube.player.YouTubePlayerView
         android:id="@+id/youtube_player"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#000"
-        android:padding="5dp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         />
