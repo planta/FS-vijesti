@@ -82,7 +82,10 @@ public class NewsAdapter extends BaseAdapter {
             playIcon = (ImageView)gridCellView.findViewById(R.id.playicon);
         }
         title.setText(newsItem.title);
-        Picasso.with(context).load(newsItem.imageURL).placeholder(R.drawable.placeholder).resize(300,300).centerCrop().into(newsImage);
+        if(important)
+            Picasso.with(context).load(newsItem.imageURL).placeholder(R.drawable.placeholder).resize(500,500).centerCrop().into(newsImage);
+        else
+            Picasso.with(context).load(newsItem.imageURL).placeholder(R.drawable.placeholder).resize(300,300).centerCrop().into(newsImage);
         playIcon.setImageResource(R.drawable.player);
         if(newsItem.category.equals("Videos")){
             playIcon.setVisibility(View.VISIBLE);

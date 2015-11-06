@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
 
         Pushbots.sharedInstance().init(this);
         // Set up the action bar.
+//        Pushbots.sharedInstance().debug(true);
+//        Pushbots.sharedInstance().setAlias("Test");
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
@@ -128,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                     intent.putExtra("newsContent", newsItem.content);
                     intent.putExtra("newsDate", newsItem.date);
                     intent.putExtra("newsCategory", newsItem.category);
+                    intent.putExtra("ID",newsItem.id);
 
                     if(currentTab != null) {
                         intent.putExtra("currentTab", currentTab);
@@ -245,6 +248,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                     newsItem.setCategory(newsItemJSON.optString("category"));
                     newsItem.setImageURL(newsItemJSON.optString("image"));
                     newsItem.setDate(newsItemJSON.optString("date"));
+                    newsItem.setId(newsItemJSON.optString("id"));
 
                     if(newsItemJSON.optString("important").equals("1") || i==0){
                         newsItem.setImportant(true);

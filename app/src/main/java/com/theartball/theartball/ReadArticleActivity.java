@@ -1,6 +1,8 @@
 package com.theartball.theartball;
 
 import android.app.ActionBar;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -37,13 +39,19 @@ import com.google.android.youtube.player.YouTubePlayerView;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -59,9 +67,13 @@ public class ReadArticleActivity extends ActionBarActivity {
     String category;
     String author;
     String currentTab;
+    String articleID;
 
     ScrollView scrollView;
     String imageURL;
+
+    TextView titleTextView;
+    WebView contentTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +89,7 @@ public class ReadArticleActivity extends ActionBarActivity {
         date = articleData.getString("newsDate");
         category = articleData.getString("newsCategory");
         author = articleData.getString("newsAuthor");
-
+        articleID=articleData.getString("ID");
 
         imageURL=articleData.getString("ImageURL");
 
@@ -85,7 +97,7 @@ public class ReadArticleActivity extends ActionBarActivity {
 
 
         currentTab = articleData.getString("currentTab");
-        TextView titleTextView = (TextView) findViewById(R.id.titleTextView);
+        titleTextView = (TextView) findViewById(R.id.titleTextView);
         titleTextView.setText(title);
         TextView dateTextView = (TextView) findViewById(R.id.date);
         dateTextView.setText("Date added: " + date);
@@ -100,7 +112,7 @@ public class ReadArticleActivity extends ActionBarActivity {
             categoryTextView.setText("Category: " + category);
         }
 
-        WebView contentTextView = (WebView) findViewById(R.id.content);
+        contentTextView = (WebView) findViewById(R.id.content);
 
         String[] links = extractLinks(content);
         content = addTagsToLinks(content, links);
@@ -135,9 +147,18 @@ public class ReadArticleActivity extends ActionBarActivity {
         contentTextView.setBackgroundColor(ContextCompat.getColor(ReadArticleActivity.this, R.color.lighterGrey));
     }
 
+    public void resetTitleAndContent(String newTitle, String newContent){
+        String[] links = extractLinks(newContent);
+        newContent = addTagsToLinks(newContent, links);
+        contentTextView.loadDataWithBaseURL("",newContent,"text/html","UTF-8","");
+        titleTextView.setText(newTitle);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        if(category!=null)
+            menu.findItem(R.id.action_refresh).setVisible(true);
         return true;
     }
 
@@ -166,6 +187,9 @@ public class ReadArticleActivity extends ActionBarActivity {
             case R.id.action_about:
                 intent = new Intent(this, AboutActivity.class);
                 startActivity(intent);
+                return true;
+            case R.id.action_refresh:
+                new getTitleAndContentTask().execute();
                 return true;
         }
 
@@ -214,6 +238,68 @@ public class ReadArticleActivity extends ActionBarActivity {
         }
 
         return text;
+    }
+
+    private class getTitleAndContentTask extends AsyncTask<String, String, String> {
+
+        private ProgressDialog progressDialog = new ProgressDialog(ReadArticleActivity.this);
+        InputStream inputStream = null;
+        String result = "";
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog.setMessage("Loading...");
+            progressDialog.show();
+            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                public void onCancel(DialogInterface arg0) {
+                    getTitleAndContentTask.this.cancel(true);
+                }
+            });
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            progressDialog.dismiss();
+//            s="{ \"Android\" :"+s+"}";
+            try {
+                JSONObject newArticle = new JSONObject(s);
+                String newTitle=newArticle.optString("title");
+                String newContent=newArticle.optString("content");
+                resetTitleAndContent(newTitle,newContent);
+            } catch (JSONException e){
+                e.printStackTrace();
+            }
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                URL newsUrl = new URL("http://theartball.com/admin/iOS/get-single-article.php?id=" + articleID);
+                URLConnection urlConnection = newsUrl.openConnection();
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                String line = null;
+
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line + "\n");
+                }
+                result = stringBuilder.toString();
+            } catch (UnsupportedEncodingException e1) {
+//                Log.e("UnsupportedEncodingException", e1.toString());
+                e1.printStackTrace();
+            } catch (IllegalStateException e3) {
+                Log.e("IllegalStateException", e3.toString());
+                e3.printStackTrace();
+            } catch (IOException e4) {
+                Log.e("IOException", e4.toString());
+                e4.printStackTrace();
+            }
+
+            return result;
+        }
     }
 }
 

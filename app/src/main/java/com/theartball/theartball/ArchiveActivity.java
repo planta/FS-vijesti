@@ -84,6 +84,7 @@ public class ArchiveActivity extends ActionBarActivity {
                     intent.putExtra("newsContent", newsItem.content);
                     intent.putExtra("newsDate", newsItem.date);
                     intent.putExtra("newsCategory", newsItem.category);
+                    intent.putExtra("ID",newsItem.id);
                     startActivity(intent);
                 }
             }
@@ -199,6 +200,7 @@ public class ArchiveActivity extends ActionBarActivity {
                     newsItem.setCategory(newsItemJSON.optString("category"));
                     newsItem.setImageURL(newsItemJSON.optString("image"));
                     newsItem.setDate(newsItemJSON.optString("date"));
+                    newsItem.setId(newsItemJSON.optString("id"));
 
                     if(newsItemJSON.optString("important").equals("1")){
                         newsItem.setImportant(true);

@@ -11,6 +11,7 @@ import com.felipecsl.asymmetricgridview.library.model.AsymmetricItem;
  */
 public class NewsItem  implements AsymmetricItem{
 
+    String id;
     String title;
     String content;
     String category;
@@ -37,6 +38,10 @@ public class NewsItem  implements AsymmetricItem{
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public void setId(String id){
+        this.id=id;
     }
 
     public void setImportant(boolean important){
