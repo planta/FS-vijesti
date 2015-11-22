@@ -100,7 +100,7 @@ public class CommentsActivity extends ActionBarActivity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
-
+        Log.d("TAG",title);
         intent.putExtra("newsTitle", title);
         intent.putExtra("newsContent", content);
         intent.putExtra("newsDate", date);

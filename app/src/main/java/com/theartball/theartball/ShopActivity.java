@@ -113,6 +113,7 @@ public class ShopActivity extends ActionBarActivity {
                 for(int i=0; i<allItemsArray.length(); i++){
                     JSONObject commentItemJSON = allItemsArray.getJSONObject(i);
                     ShopItem shopItem = new ShopItem();
+                    Log.d("TAG",commentItemJSON.optString("image"));
                     shopItem.setImageURL(commentItemJSON.optString("image"));
                     shopItem.setTitle(commentItemJSON.optString("title"));
                     shopItem.setDescription(commentItemJSON.optString("description"));

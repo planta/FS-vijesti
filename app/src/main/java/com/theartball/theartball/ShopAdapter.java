@@ -1,6 +1,7 @@
 package com.theartball.theartball;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,7 @@ public class ShopAdapter extends BaseAdapter {
         ShopItem shopItem = oglasi.get(position);
         shopItemCellView = layoutInflater.inflate(R.layout.listing_cell, null);
         ImageView image = (ImageView)shopItemCellView.findViewById(R.id.listingImage);
+        Log.d("TAG", shopItem.imageURL);
         Picasso.with(context).load(shopItem.imageURL).placeholder(R.drawable.placeholder).resize(300,300).centerCrop().into(image);
         TextView title = (TextView)shopItemCellView.findViewById(R.id.listingTitle);
         title.setText(shopItem.title);
