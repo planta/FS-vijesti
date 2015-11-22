@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                     intent.putExtra("newsContent", newsItem.content);
                     intent.putExtra("newsDate", newsItem.date);
                     intent.putExtra("newsCategory", newsItem.category);
-                    intent.putExtra("ID",newsItem.id);
+                    intent.putExtra("ID", newsItem.id);
 
                     if(currentTab != null) {
                         intent.putExtra("currentTab", currentTab);
@@ -170,6 +170,10 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                 return true;
             case R.id.action_articles:
                 intent = new Intent(this, ArticlesActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.action_shop:
+                intent = new Intent(this, ShopActivity.class);
                 startActivity(intent);
                 return true;
             case R.id.action_about:

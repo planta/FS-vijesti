@@ -3,17 +3,12 @@ package com.theartball.theartball;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.android.gms.ads.AdRequest;
@@ -33,43 +28,22 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 
 /**
- * Created by Mario on 30.8.2015..
+ * Created by Mario on 22.11.2015..
  */
-public class ArticlesActivity extends ActionBarActivity {
-    final ArrayList<ArticleItem> articlesArray = new ArrayList<ArticleItem>();
-    String databaseURL="http://www.theartball.com/admin/iOS/getarticles.php";
+public class ShopActivity extends ActionBarActivity {
+    final ArrayList<ShopItem> shopArray = new ArrayList<ShopItem>();
+    String databaseURL = "http://www.theartball.com/admin/iOS/getlistings.php";
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_articles);
+        setContentView(R.layout.activity_shop);
 
         AdView mAdView = (AdView)findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
-        final ArticleAdapter adapter = new ArticleAdapter(getApplicationContext(), articlesArray);
-        final ListView articleList = (ListView)findViewById(R.id.articleList);
-        articleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ArticleItem articleItem = articlesArray.get(position);
-
-                Intent intent;
-                intent = new Intent(ArticlesActivity.this, ReadArticleActivity.class);
-
-                intent.putExtra("newsTitle", articleItem.title);
-                intent.putExtra("newsContent", articleItem.content);
-                intent.putExtra("newsDate", articleItem.date);
-                intent.putExtra("newsAuthor", articleItem.author);
-                intent.putExtra("ImageURL",articleItem.imageURL);
-                startActivity(intent);
-            }
-        });
-
-        final ActionBar actionBar = getSupportActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.argb(255, 11, 120, 228)));
-
-        new ArticleAsyncTask().execute();
+        new ShopAsyncTask().execute();
     }
 
     @Override
@@ -111,9 +85,9 @@ public class ArticlesActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    class ArticleAsyncTask extends AsyncTask<String, String, String> {
+    class ShopAsyncTask extends AsyncTask<String, String, String> {
 
-        private ProgressDialog progressDialog = new ProgressDialog(ArticlesActivity.this);
+        private ProgressDialog progressDialog = new ProgressDialog(ShopActivity.this);
         InputStream inputStream = null;
         String result = "";
 
@@ -122,7 +96,7 @@ public class ArticlesActivity extends ActionBarActivity {
             progressDialog.show();
             progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 public void onCancel(DialogInterface arg0) {
-                    ArticleAsyncTask.this.cancel(true);
+                    ShopAsyncTask.this.cancel(true);
                 }
             });
         }
@@ -133,27 +107,26 @@ public class ArticlesActivity extends ActionBarActivity {
             result="{ \"Android\" :"+result+"}";
             progressDialog.dismiss();
             try {
-                JSONObject allArticles = new JSONObject(result);
-                JSONArray allArticlesArray = allArticles.optJSONArray("Android");
-                articlesArray.clear();
-                for(int i=0;i<allArticlesArray.length();i++){
-                    JSONObject articleItemJSON = allArticlesArray.getJSONObject(i);
-                    ArticleItem articleItem = new ArticleItem();
-                    articleItem.setTitle(articleItemJSON.optString("title"));
-                    articleItem.setContent(articleItemJSON.optString("content"));
-                    articleItem.setImageURL(articleItemJSON.optString("image"));
-                    articleItem.setAuthor(articleItemJSON.optString("author"));
-                    articleItem.setDate(articleItemJSON.optString("date"));
+                JSONObject allItems = new JSONObject(result);
+                JSONArray allItemsArray = allItems.optJSONArray("Android");
+                shopArray.clear();
+                for(int i=0; i<allItemsArray.length(); i++){
+                    JSONObject commentItemJSON = allItemsArray.getJSONObject(i);
+                    ShopItem shopItem = new ShopItem();
+                    shopItem.setImageURL(commentItemJSON.optString("image"));
+                    shopItem.setTitle(commentItemJSON.optString("title"));
+                    shopItem.setDescription(commentItemJSON.optString("description"));
+                    shopItem.setSeller(commentItemJSON.optString("seller"));
+                    shopItem.setPrice(commentItemJSON.optString("price"));
 
-                    articlesArray.add(articleItem);
+                    shopArray.add(shopItem);
                 }
 
-                ListView articleList = (ListView)findViewById(R.id.articleList);
-                articleList.setAdapter(new ArticleAdapter(getApplicationContext(), articlesArray));
+                ListView shopList = (ListView)findViewById(R.id.shopList);
+                shopList.setAdapter(new ShopAdapter(getApplicationContext(), shopArray));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }
 
         @Override
@@ -172,7 +145,6 @@ public class ArticlesActivity extends ActionBarActivity {
                 }
                 result = stringBuilder.toString();
             } catch (UnsupportedEncodingException e1) {
-//                Log.e("UnsupportedEncodingException", e1.toString());
                 e1.printStackTrace();
             } catch (IllegalStateException e3) {
                 Log.e("IllegalStateException", e3.toString());

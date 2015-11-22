@@ -1,55 +1,37 @@
 package com.theartball.theartball;
 
-import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LevelListDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.RequiresPermission;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
-import android.text.Html;
-import android.text.Spanned;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubeIntents;
-import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerView;
-import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -89,12 +71,9 @@ public class ReadArticleActivity extends ActionBarActivity {
         date = articleData.getString("newsDate");
         category = articleData.getString("newsCategory");
         author = articleData.getString("newsAuthor");
-        articleID=articleData.getString("ID");
+        articleID = articleData.getString("ID");
 
-        imageURL=articleData.getString("ImageURL");
-
-        currentTab = articleData.getString("currentTab");
-
+        imageURL = articleData.getString("ImageURL");
 
         currentTab = articleData.getString("currentTab");
         titleTextView = (TextView) findViewById(R.id.titleTextView);
@@ -157,8 +136,10 @@ public class ReadArticleActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        if(category!=null)
+        if(category!=null) {
+            menu.findItem(R.id.action_comment).setVisible(true);
             menu.findItem(R.id.action_refresh).setVisible(true);
+        }
         return true;
     }
 
@@ -186,6 +167,15 @@ public class ReadArticleActivity extends ActionBarActivity {
                 return true;
             case R.id.action_about:
                 intent = new Intent(this, AboutActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.action_comment:
+                intent = new Intent(this, CommentsActivity.class);
+                intent.putExtra("newsTitle", title);
+                intent.putExtra("newsContent", content);
+                intent.putExtra("newsDate", date);
+                intent.putExtra("newsCategory", category);
+                intent.putExtra("ID", articleID);
                 startActivity(intent);
                 return true;
             case R.id.action_refresh:

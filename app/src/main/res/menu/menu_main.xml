@@ -1,6 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+    <item android:id="@+id/action_comment" android:title="@string/action_comment"
+        android:orderInCategory="100" app:showAsAction="always" android:visible="false" android:icon="@drawable/comment" />
     <item android:id="@+id/action_refresh" android:title="@string/action_refresh"
         android:orderInCategory="100" app:showAsAction="always" android:visible="false" android:icon="@drawable/refresh" />
     <item android:id="@+id/action_search" android:title="@string/action_refresh"
@@ -8,6 +10,8 @@
     <item android:id="@+id/action_archive" android:title="@string/action_archive"
         android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/action_articles" android:title="@string/action_articles"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_shop" android:title="@string/action_shop"
         android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/action_about" android:title="@string/action_about"
         android:orderInCategory="100" app:showAsAction="never" />

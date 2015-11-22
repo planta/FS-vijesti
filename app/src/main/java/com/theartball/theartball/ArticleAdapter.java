@@ -43,24 +43,24 @@ public class ArticleAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View archiveCellView;
+        View articleCellView;
 
         LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         if(convertView == null) {
-            archiveCellView = new View(context);
+            articleCellView = new View(context);
         } else {
-            archiveCellView = (View)convertView;
+            articleCellView = (View)convertView;
         }
         ArticleItem articleItem = articleList.get(position);
-        archiveCellView = layoutInflater.inflate(R.layout.article_cell, null);
-        ImageView image = (ImageView)archiveCellView.findViewById(R.id.articleImage);
+        articleCellView = layoutInflater.inflate(R.layout.article_cell, null);
+        ImageView image = (ImageView)articleCellView.findViewById(R.id.articleImage);
         Picasso.with(context).load(articleItem.imageURL).placeholder(R.drawable.placeholder).resize(300,300).centerCrop().into(image);
-        TextView title = (TextView)archiveCellView.findViewById(R.id.articleTitle);
+        TextView title = (TextView)articleCellView.findViewById(R.id.articleTitle);
         title.setText(articleItem.title);
-        TextView subtitle = (TextView)archiveCellView.findViewById(R.id.articleSubtitle);
+        TextView subtitle = (TextView)articleCellView.findViewById(R.id.articleSubtitle);
         subtitle.setText("By: " + articleItem.author);
 
-        return archiveCellView;
+        return articleCellView;
     }
 }

@@ -69,6 +69,18 @@
             android:label="@string/title_full_screen_image" >
         </activity>
         <activity
+            android:name=".CommentsActivity"
+            android:label="@string/action_comment"
+            android:parentActivityName=".ReadArticleActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ShopActivity"
+            android:label="@string/action_shop"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:theme="@android:style/Theme.Translucent" />
