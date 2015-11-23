@@ -161,9 +161,12 @@ public class ArchiveActivity extends ActionBarActivity {
                 startActivity(intent);
                 return true;
             case R.id.action_search:
-                EditText et=(EditText)findViewById(R.id.searchField);
-                if(et.getVisibility()==View.VISIBLE) et.setVisibility(View.GONE);
-                else et.setVisibility(View.VISIBLE);
+                EditText search = (EditText)findViewById(R.id.searchField);
+                if(search.getVisibility()==View.VISIBLE) {
+                    search.setVisibility(View.GONE);
+                } else {
+                    search.setVisibility(View.VISIBLE);
+                }
 
                 return true;
         }

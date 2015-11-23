@@ -9,6 +9,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 
@@ -33,7 +36,8 @@ import java.util.ArrayList;
  */
 public class CommentsActivity extends ActionBarActivity {
     final ArrayList<CommentItem> commentsArray = new ArrayList<CommentItem>();
-    String databaseURL;
+    String commentsURL;
+    String commentURL;
 
     String title;
     String content;
@@ -57,7 +61,7 @@ public class CommentsActivity extends ActionBarActivity {
         date = articleData.getString("newsDate");
         category = articleData.getString("newsCategory");
 
-        databaseURL = "http://www.theartball.com/admin/iOS/getcomments.php?article_id=" + articleID;
+        commentsURL = "http://www.theartball.com/admin/iOS/getcomments.php?article_id=" + articleID;
 
         new CommentsAsyncTask().execute();
     }
@@ -66,6 +70,7 @@ public class CommentsActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        menu.findItem(R.id.action_comment).setVisible(true);
         return true;
     }
 
@@ -92,6 +97,14 @@ public class CommentsActivity extends ActionBarActivity {
                 intent = new Intent(this, AboutActivity.class);
                 startActivity(intent);
                 return true;
+            case R.id.action_comment:
+                LinearLayout commenting = (LinearLayout)findViewById(R.id.commenting);
+                if(commenting.getVisibility()==View.VISIBLE) {
+                    commenting.setVisibility(View.GONE);
+                } else {
+                    commenting.setVisibility(View.VISIBLE);
+                }
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -109,6 +122,82 @@ public class CommentsActivity extends ActionBarActivity {
 
         setResult(RESULT_OK, intent);
         super.onBackPressed();
+    }
+
+    public void commentPressed() {
+        new CommentAsyncTask().execute();
+    }
+
+    class CommentAsyncTask extends AsyncTask<String, String, String> {
+
+        private ProgressDialog progressDialog = new ProgressDialog(CommentsActivity.this);
+        InputStream inputStream = null;
+        String result = "";
+
+        protected void onPreExecute() {
+            progressDialog.setMessage("Loading...");
+            progressDialog.show();
+            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                public void onCancel(DialogInterface arg0) {
+                    CommentAsyncTask.this.cancel(true);
+                }
+            });
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            result="{ \"Android\" :"+result+"}";
+            progressDialog.dismiss();
+            try {
+                JSONObject allComments = new JSONObject(result);
+                JSONArray allCommentsArray = allComments.optJSONArray("Android");
+                commentsArray.clear();
+                for(int i=0; i<allCommentsArray.length(); i++){
+                    JSONObject commentItemJSON = allCommentsArray.getJSONObject(i);
+                    CommentItem commentItem = new CommentItem();
+                    commentItem.setAuthor(commentItemJSON.optString("author"));
+                    commentItem.setDate(commentItemJSON.optString("time"));
+                    commentItem.setComment(commentItemJSON.optString("comment"));
+
+                    commentsArray.add(commentItem);
+                }
+
+                ListView commentsList = (ListView)findViewById(R.id.commentsList);
+                commentsList.setAdapter(new CommentsAdapter(getApplicationContext(), commentsArray));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                URL newCommentURL = new URL(commentURL);
+                URLConnection urlConnection = newCommentURL.openConnection();
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                String line = null;
+
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line + "\n");
+                }
+                result = stringBuilder.toString();
+            } catch (UnsupportedEncodingException e1) {
+                e1.printStackTrace();
+            } catch (IllegalStateException e3) {
+                Log.e("IllegalStateException", e3.toString());
+                e3.printStackTrace();
+            } catch (IOException e4) {
+                Log.e("IOException", e4.toString());
+                e4.printStackTrace();
+            }
+
+            return result;
+        }
     }
 
     class CommentsAsyncTask extends AsyncTask<String, String, String> {
@@ -157,8 +246,8 @@ public class CommentsActivity extends ActionBarActivity {
         @Override
         protected String doInBackground(String... params) {
             try {
-                URL newsUrl = new URL(databaseURL);
-                URLConnection urlConnection = newsUrl.openConnection();
+                URL commentURL = new URL(commentsURL);
+                URLConnection urlConnection = commentURL.openConnection();
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
                 String line = null;

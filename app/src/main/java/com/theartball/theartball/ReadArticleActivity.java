@@ -137,7 +137,7 @@ public class ReadArticleActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         if(category!=null) {
-            menu.findItem(R.id.action_comment).setVisible(true);
+            menu.findItem(R.id.action_comments).setVisible(true);
             menu.findItem(R.id.action_refresh).setVisible(true);
         }
         return true;
@@ -169,7 +169,7 @@ public class ReadArticleActivity extends ActionBarActivity {
                 intent = new Intent(this, AboutActivity.class);
                 startActivity(intent);
                 return true;
-            case R.id.action_comment:
+            case R.id.action_comments:
                 intent = new Intent(this, CommentsActivity.class);
                 intent.putExtra("newsTitle", title);
                 intent.putExtra("newsContent", content);
