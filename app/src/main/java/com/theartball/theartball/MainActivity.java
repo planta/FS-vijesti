@@ -172,10 +172,10 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                 intent = new Intent(this, ArticlesActivity.class);
                 startActivity(intent);
                 return true;
-            case R.id.action_shop:
-                intent = new Intent(this, ShopActivity.class);
-                startActivity(intent);
-                return true;
+            //case R.id.action_shop:
+                //intent = new Intent(this, ShopActivity.class);
+                //startActivity(intent);
+                //return true;
             case R.id.action_about:
                 intent = new Intent(this, AboutActivity.class);
                 startActivity(intent);

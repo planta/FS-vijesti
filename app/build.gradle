@@ -36,6 +36,6 @@ dependencies {
     compile 'com.github.chrisbanes.photoview:library:+'
     compile 'com.felipecsl.asymmetricgridview:library:2.0.1'
     compile 'com.pushbots:pushbots-lib:2.0.13@aar'
-    compile 'com.android.support:support-v4:21.0.0'
+    compile 'com.android.support:support-v4:23.0.0'
 
 }

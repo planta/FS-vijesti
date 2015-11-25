@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -43,7 +43,14 @@ public class CommentsActivity extends ActionBarActivity {
     String content;
     String date;
     String category;
+    String author;
     String articleID;
+
+    String isArticle;
+    String currentTab;
+
+    String commentAuthor;
+    String commentContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +67,24 @@ public class CommentsActivity extends ActionBarActivity {
         content = articleData.getString("newsContent");
         date = articleData.getString("newsDate");
         category = articleData.getString("newsCategory");
+        author = articleData.getString("newsAuthor");
 
-        commentsURL = "http://www.theartball.com/admin/iOS/getcomments.php?article_id=" + articleID;
+        isArticle = articleData.getString("isArticle");
+        currentTab = articleData.getString("currentTab");
+
+        commentURL = "http://www.theartball.com/admin/iOS/addcomment.php?article_id=" + articleID + "&forArticles=";
+        commentsURL = "http://www.theartball.com/admin/iOS/getcomments.php?article_id=" + articleID + "&forArticles=";
+
+        if(isArticle.equals("true")) {
+            commentURL.concat("1");
+            commentsURL.concat("1");
+        } else {
+            commentURL.concat("0");
+            commentsURL.concat("0");
+        }
+
+        TextView titleLabel = (TextView)findViewById(R.id.title);
+        titleLabel.setText(title);
 
         new CommentsAsyncTask().execute();
     }
@@ -105,6 +128,9 @@ public class CommentsActivity extends ActionBarActivity {
                     commenting.setVisibility(View.VISIBLE);
                 }
                 return true;
+            case android.R.id.home:
+                finish();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -118,6 +144,8 @@ public class CommentsActivity extends ActionBarActivity {
         intent.putExtra("newsContent", content);
         intent.putExtra("newsDate", date);
         intent.putExtra("newsCategory", category);
+        intent.putExtra("newsAuthor", author);
+        intent.putExtra("currentTab", currentTab);
         intent.putExtra("ID", articleID);
 
         setResult(RESULT_OK, intent);
@@ -125,6 +153,15 @@ public class CommentsActivity extends ActionBarActivity {
     }
 
     public void commentPressed() {
+        EditText username = (EditText)findViewById(R.id.author);
+        EditText comment = (EditText)findViewById(R.id.comment);
+
+        commentAuthor = username.getText().toString();
+        commentContent = comment.getText().toString();
+
+        commentURL.concat("&author=" + commentAuthor);
+        commentURL.concat("&comment=" + commentContent);
+
         new CommentAsyncTask().execute();
     }
 
@@ -146,46 +183,14 @@ public class CommentsActivity extends ActionBarActivity {
 
         @Override
         protected void onPostExecute(String result) {
-
-            result="{ \"Android\" :"+result+"}";
             progressDialog.dismiss();
-            try {
-                JSONObject allComments = new JSONObject(result);
-                JSONArray allCommentsArray = allComments.optJSONArray("Android");
-                commentsArray.clear();
-                for(int i=0; i<allCommentsArray.length(); i++){
-                    JSONObject commentItemJSON = allCommentsArray.getJSONObject(i);
-                    CommentItem commentItem = new CommentItem();
-                    commentItem.setAuthor(commentItemJSON.optString("author"));
-                    commentItem.setDate(commentItemJSON.optString("time"));
-                    commentItem.setComment(commentItemJSON.optString("comment"));
-
-                    commentsArray.add(commentItem);
-                }
-
-                ListView commentsList = (ListView)findViewById(R.id.commentsList);
-                commentsList.setAdapter(new CommentsAdapter(getApplicationContext(), commentsArray));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
         }
 
         @Override
         protected String doInBackground(String... params) {
             try {
-                URL newCommentURL = new URL(commentURL);
-                URLConnection urlConnection = newCommentURL.openConnection();
-
-                BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                String line = null;
-
-                StringBuilder stringBuilder = new StringBuilder();
-
-                while ((line = reader.readLine()) != null) {
-                    stringBuilder.append(line + "\n");
-                }
-                result = stringBuilder.toString();
+                URL sendCommentURL = new URL(commentURL);
+                URLConnection urlConnection = sendCommentURL.openConnection();
             } catch (UnsupportedEncodingException e1) {
                 e1.printStackTrace();
             } catch (IllegalStateException e3) {

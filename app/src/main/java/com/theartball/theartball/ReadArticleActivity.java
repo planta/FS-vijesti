@@ -54,6 +54,8 @@ public class ReadArticleActivity extends ActionBarActivity {
     ScrollView scrollView;
     String imageURL;
 
+    String goHome;
+
     TextView titleTextView;
     WebView contentTextView;
 
@@ -64,7 +66,7 @@ public class ReadArticleActivity extends ActionBarActivity {
 
         final android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.argb(255, 11, 120, 228)));
-        scrollView = (ScrollView) findViewById(R.id.scrollView);
+        scrollView = (ScrollView)findViewById(R.id.scrollView);
         Bundle articleData = getIntent().getExtras();
         title = articleData.getString("newsTitle");
         content = articleData.getString("newsContent");
@@ -72,6 +74,8 @@ public class ReadArticleActivity extends ActionBarActivity {
         category = articleData.getString("newsCategory");
         author = articleData.getString("newsAuthor");
         articleID = articleData.getString("ID");
+
+        goHome = articleData.getString("goHome");
 
         imageURL = articleData.getString("ImageURL");
 
@@ -175,7 +179,16 @@ public class ReadArticleActivity extends ActionBarActivity {
                 intent.putExtra("newsContent", content);
                 intent.putExtra("newsDate", date);
                 intent.putExtra("newsCategory", category);
+                intent.putExtra("newsAuthor", author);
+                intent.putExtra("currentTab", currentTab);
                 intent.putExtra("ID", articleID);
+
+                if(category == null) {
+                    intent.putExtra("isArticle", "true");
+                } else {
+                    intent.putExtra("isArticle", "false");
+                }
+
                 startActivity(intent);
                 return true;
             case R.id.action_refresh:
