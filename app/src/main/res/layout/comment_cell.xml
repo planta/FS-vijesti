@@ -3,13 +3,13 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="@drawable/full_comment_shape">
 
-    <LinearLayout
+    <RelativeLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#008ae5">
+        android:background="@drawable/comment_title_shape">
 
         <TextView
             android:id="@+id/commentAuthor"
@@ -19,13 +19,24 @@
             android:textColor="#FFFFFF"
             android:layout_marginTop="6dp"
             android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp" />
+            android:layout_marginRight="12dp"
+            android:textStyle="bold"/>
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/logoComment"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="6dp"
+            android:src="@drawable/ikonaartball"
+            />
 
         <TextView
             android:id="@+id/commentDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Date"
+            android:layout_alignParentBottom="true"
             android:textColor="#FFFFFF"
             android:textStyle="normal|italic"
             android:layout_marginBottom="6dp"
@@ -33,7 +44,7 @@
             android:layout_marginTop="2dp"
             android:layout_marginRight="12dp" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/commentContent"

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -26,7 +27,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -52,6 +55,8 @@ public class CommentsActivity extends ActionBarActivity {
     String commentAuthor;
     String commentContent;
 
+    LinearLayout commenting;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +66,25 @@ public class CommentsActivity extends ActionBarActivity {
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
+        Button addComment=(Button) findViewById(R.id.commentButton);
+        addComment.setOnClickListener(
+                new Button.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        commentPressed();
+                    }
+                }
+        );
+
+        Button cancelCommentButton=(Button)findViewById(R.id.cancelCommentButton);
+        cancelCommentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openOrCloseCommentView();
+            }
+        });
+        commenting = (LinearLayout)findViewById(R.id.commenting);
         Bundle articleData = getIntent().getExtras();
         articleID = articleData.getString("ID");
         title = articleData.getString("newsTitle");
@@ -72,15 +96,15 @@ public class CommentsActivity extends ActionBarActivity {
         isArticle = articleData.getString("isArticle");
         currentTab = articleData.getString("currentTab");
 
-        commentURL = "http://www.theartball.com/admin/iOS/addcomment.php?article_id=" + articleID + "&forArticles=";
+        commentURL = "http://www.theartball.com/admin/iOS/addcomment.php";
         commentsURL = "http://www.theartball.com/admin/iOS/getcomments.php?article_id=" + articleID + "&forArticles=";
 
         if(isArticle.equals("true")) {
-            commentURL.concat("1");
-            commentsURL.concat("1");
+//            commentURL= commentURL.concat("1");
+            commentsURL= commentsURL.concat("1");
         } else {
-            commentURL.concat("0");
-            commentsURL.concat("0");
+//            commentURL= commentURL.concat("0");
+            commentsURL= commentsURL.concat("0");
         }
 
         TextView titleLabel = (TextView)findViewById(R.id.title);
@@ -93,7 +117,9 @@ public class CommentsActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        menu.findItem(R.id.action_refresh).setVisible(true);
         menu.findItem(R.id.action_comment).setVisible(true);
+
         return true;
     }
 
@@ -120,13 +146,11 @@ public class CommentsActivity extends ActionBarActivity {
                 intent = new Intent(this, AboutActivity.class);
                 startActivity(intent);
                 return true;
+            case R.id.action_refresh:
+                new CommentsAsyncTask().execute();
+                return true;
             case R.id.action_comment:
-                LinearLayout commenting = (LinearLayout)findViewById(R.id.commenting);
-                if(commenting.getVisibility()==View.VISIBLE) {
-                    commenting.setVisibility(View.GONE);
-                } else {
-                    commenting.setVisibility(View.VISIBLE);
-                }
+                openOrCloseCommentView();
                 return true;
             case android.R.id.home:
                 finish();
@@ -134,6 +158,14 @@ public class CommentsActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void openOrCloseCommentView(){
+        if(commenting.getVisibility()==View.VISIBLE) {
+            commenting.setVisibility(View.GONE);
+        } else {
+            commenting.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -159,8 +191,8 @@ public class CommentsActivity extends ActionBarActivity {
         commentAuthor = username.getText().toString();
         commentContent = comment.getText().toString();
 
-        commentURL.concat("&author=" + commentAuthor);
-        commentURL.concat("&comment=" + commentContent);
+//        commentURL=commentURL.concat("&author=" + commentAuthor);
+//        commentURL=commentURL.concat("&comment=" + commentContent);
 
         new CommentAsyncTask().execute();
     }
@@ -172,25 +204,60 @@ public class CommentsActivity extends ActionBarActivity {
         String result = "";
 
         protected void onPreExecute() {
-            progressDialog.setMessage("Loading...");
-            progressDialog.show();
+//            progressDialog.setMessage("Loading...");
+//            progressDialog.show();
             progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 public void onCancel(DialogInterface arg0) {
+
                     CommentAsyncTask.this.cancel(true);
+
                 }
             });
         }
 
         @Override
         protected void onPostExecute(String result) {
-            progressDialog.dismiss();
+//            progressDialog.dismiss();
+            if (result.trim().equals("Comment successfully added.")) {
+
+                new CommentsAsyncTask().execute();
+                openOrCloseCommentView();
+            }
         }
 
         @Override
         protected String doInBackground(String... params) {
             try {
-                URL sendCommentURL = new URL(commentURL);
-                URLConnection urlConnection = sendCommentURL.openConnection();
+
+                String parameters="?author=" + commentAuthor + "&comment=" +commentContent + "&article_id=" + articleID + "&forArticles=0";
+                parameters=parameters.replaceAll(" ","%20");
+                URL url = new URL(commentURL+parameters);
+
+//                Log.d("TAG",commentURL+parameters);
+                OutputStreamWriter request = null;
+
+                String response;
+                HttpURLConnection urlConnection =(HttpURLConnection) url.openConnection();
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setDoOutput(true);
+                urlConnection.setRequestMethod("POST");
+                request = new OutputStreamWriter(urlConnection.getOutputStream());
+                request.flush();
+                request.close();
+                String line = "";
+                InputStreamReader isr = new InputStreamReader(urlConnection.getInputStream());
+                BufferedReader reader = new BufferedReader(isr);
+                StringBuilder sb = new StringBuilder();
+                while ((line = reader.readLine()) != null)
+                {
+                    sb.append(line + "\n");
+                }
+                response = sb.toString();
+                result=response;
+                Log.d("TAG", response);
+                isr.close();
+                reader.close();
+
             } catch (UnsupportedEncodingException e1) {
                 e1.printStackTrace();
             } catch (IllegalStateException e3) {

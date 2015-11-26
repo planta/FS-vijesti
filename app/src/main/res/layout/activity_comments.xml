@@ -42,14 +42,24 @@
             android:layout_marginRight="8dp"
             android:layout_marginLeft="8dp"
             android:padding="6dp" />
-
-        <Button
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Comment"
-            android:id="@+id/commentButton"
-            android:layout_gravity="right"
-            android:layout_marginRight="8dp" />
+            android:layout_gravity="center_horizontal">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Comment"
+                android:id="@+id/commentButton"
+                android:layout_marginRight="8dp" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:id="@+id/cancelCommentButton"
+                android:layout_toRightOf="@+id/commentButton"
+                android:layout_marginRight="8dp" />
+        </RelativeLayout>
     </LinearLayout>
 
     <TextView
